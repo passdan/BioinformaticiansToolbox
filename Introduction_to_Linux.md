@@ -94,7 +94,7 @@ The command used to change directories is cd.
 If you think of your directory structure as a tree then the simplest directory change you can do is climb up or down into a folder directly above or below the one you are in.
 
 Example directories (not your structure!)
-![](/BioinformaticiansToolbox/images/LinuxIntroExcercises1.png)
+![](images/LinuxIntroExcercises1.png)
 
 Here, to change to a directory one below the current location you would use the cd command followed by the subdirectory name i.e. to move from User1 to ‘Downloads’:
 ```
@@ -198,7 +198,7 @@ The command ls lists files in a directory. By default, the command will list the
 
 If you add a space followed by a –l (that is, a hyphen and a small letter L), after the ls command, it alters the behaviour of  the command: it will now list the files in your current directory, but with details about them including who owns them, what the size is, and what kind of file it is. 
 
-![](/BioinformaticiansToolbox/images/Permissions.png)
+![](images/Permissions.png)
 
 Note also the use of colour which can help suggest what type of file it is (This doesn't show the same on all machines but it can be helpful!):
 White: plain text or unknown
@@ -493,4 +493,4 @@ It might seem simple now but will be really useful when working with lots of fil
 </details>
 
 And just in case you forget for vi (this is to exit without saving!):
-![](/BioinformaticiansToolbox/images/exit-vi.png)
+![](images/exit-vi.png)
