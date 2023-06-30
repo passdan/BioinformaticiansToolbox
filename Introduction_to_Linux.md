@@ -1,4 +1,3 @@
-# Physalia Bioinformatics School 
 ## Introduction to Linux
 
 ### Contents
