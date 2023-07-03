@@ -297,7 +297,7 @@ Therefore to replace every word ‘old’ with ‘new’ while in vi you would u
 
 Starting to write bioinformatic programs may sound daunting at first but it’s as simple as putting multiple commands into a file together. Also, the internet is full of people sharing their scripts that you can use, but be careful and don’t download random code if you don’t trust the writer!
 
-### Process when running a code file 
+### Example process when writing and running a programme
 STEP 1:
 Create a file using vi or nano and write or copy into the file the script in question ensuring you save it with an appropriate name. Terminal command scripts usually end .sh, python scripts with .py etc
 
