@@ -10,7 +10,9 @@ Following these three steps, there are an almost infinite number of tools and pa
 
 ## Data
 
-This data comes from a paper looking at the chromatin organisation within the Arabidopsis genome (Genome-wide chromatin mapping with size resolution reveals a dynamic sub-nucleosomal landscape in Arabidopsis - [https://doi.org/10.1371/journal.pgen.1006988](https://doi.org/10.1371/journal.pgen.1006988) Full data is available here:https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
+This data comes from a paper looking at the chromatin organisation within the Arabidopsis genome (Genome-wide chromatin mapping with size resolution reveals a dynamic sub-nucleosomal landscape in Arabidopsis - [https://doi.org/10.1371/journal.pgen.1006988](https://doi.org/10.1371/journal.pgen.1006988) 
+
+Full data is available here:https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
 
 We will be using  scripts to run these steps. In the Share/Day4 folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names. 
 
