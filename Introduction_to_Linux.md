@@ -486,6 +486,7 @@ echo 'Blastoff!'
   ### [EXTENSION]
   
   </summary>
+  
 1. Write a script that will run fastqc on each of the four fastq files in the folder Day1/looping but only writing the command once.
 2. Add fastp trimming to your script!
 3. Repeat fastqc on the trimmed data, all in one script!
