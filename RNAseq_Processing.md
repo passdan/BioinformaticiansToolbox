@@ -10,9 +10,11 @@ Following these three steps, there are an almost infinite number of tools and pa
 
 ## Data
 
+This data comes from a paper looking at the chromatin organisation within the Arabidopsis genome (Genome-wide chromatin mapping with size resolution reveals a dynamic sub-nucleosomal landscape in Arabidopsis - [https://doi.org/10.1371/journal.pgen.1006988](https://doi.org/10.1371/journal.pgen.1006988) Full data is available here:https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
+
 We will be using  scripts to run these steps. In the Share/Day4 folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names. 
 
-So far we have used only a small dataset to quickly practice the steps but now we’ll be using a full sized RNAseq sample otherwise it causes the programs to think it’s bad data. In the Share/Day4 folder there are four pairs of RNAseq files from an Arabidopsis RNAseq  study. In the folder Share/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
+So far we have used only a small dataset to quickly practice the steps but now we’ll be using full sized RNAseq samples. This is because otherwise it causes the programs to think it’s bad data and causes errors. In the Share/Day4 folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder Share/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
 ```
 $ ls Share/Day4/Processing:
 1-QC.sh  
@@ -23,13 +25,12 @@ $ ls Share/Day4/Processing:
 ```
 ```
 $ ls Share/Day4/fastqs
-SRR5222796_1.fastq    SRR5222796_2.fastq
 SRR5222797_1.fastq    SRR5222797_2.fastq
 SRR5222798_1.fastq    SRR5222798_2.fastq
 SRR5222799_1.fastq    SRR5222799_2.fastq
 
 $ ls Share/REFS
-Arabidopsis_thaliana.TAIR10.53.gtf
+Arabidopsis_thaliana.TAIR10.47.gtf
 Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa
 ……… <Lots of other index files for star to function that you don’t need to touch!>
 ```
