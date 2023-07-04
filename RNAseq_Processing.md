@@ -10,7 +10,7 @@ Following these three steps, there are an almost infinite number of tools and pa
 
 ## Data
 
-This data comes from a paper looking at the chromatin organisation within the Arabidopsis genome (Genome-wide chromatin mapping with size resolution reveals a dynamic sub-nucleosomal landscape in Arabidopsis - [https://doi.org/10.1371/journal.pgen.1006988](https://doi.org/10.1371/journal.pgen.1006988) 
+This data comes from a paper looking at the chromatin organisation within the Arabidopsis genome (Genome-wide chromatin mapping with size resolution reveals a dynamic sub-nucleosomal landscape in Arabidopsis - [https://doi.org/10.1371/journal.pgen.1006988](https://doi.org/10.1371/journal.pgen.1006988))
 
 Full data is available here:https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
 
