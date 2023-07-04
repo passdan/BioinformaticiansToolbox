@@ -111,7 +111,9 @@ It can accept either raw long read data or corrected. By default, expected error
 
 A simple default command for running flye with raw PacBio reads are:
 ```
-$ flye --pacbio-raw ERR022075_PacBio.fastq --out-dir flye_assemb --threads 4
+$ flye --pacbio-raw ERR022075_PacBio.fastq --out-dir raw_flye_assemb --threads 4
+or
+$ flye --pacbio-corr ERR022075_PacBio_corrected.fasta --out-dir corr_flye_assemb --threads 4
 ```
 
 There are a number of parameters which can improve assembly
@@ -142,10 +144,10 @@ Now we can use fmlrc to correct the long-read data using the short-read index:
 ```
 $ fmlrc2 -t 4 ecoli_illumina_msbwt.npy \
 ERR022075_PacBio.fastq \
-ERR022075_PacBio_fmlrc2_corr.fastq
+ERR022075_PacBio_fmlrc2_corr.fasta
 ```
 
-__You now have some nice corrected long reads!__
+__You now have some nice corrected long reads! Note that FMLRC2 outputs a fasta file (note quality data!)__
 
 ### Medaka
 Source: https://github.com/nanoporetech/medaka 
@@ -241,6 +243,7 @@ Optional docker containers for different program running:
 ```
 reslp/spades:3.15.3
 chrishah/fmlrc-wtdbg2-plus:v062022
+staphb/flye
 reslp/quast:5.0.2
 ezlabgva/busco:v5.3.2_cv1
 ```
@@ -250,7 +253,7 @@ Note: All steps have been completed and are available in ~/Share/Day3/Assemblies
 Estimated times are using 4 CPUs: 
 1. Using spades, assemble the 1% illumina short reads on their own and evaluate the resulting assembly (~10 minutes) 
 2. Using wtdbg2 (~10 minutes) or flye  (~15 minutes), assemble the raw PacBio data alone
-3. Use FMLRC2 (~10 minutes when using the pre-generated index) to correct the PacBio dataset with the Illumina short reads 
+3. Use FMLRC2 (~5 minutes when using the pre-generated index) to correct the PacBio dataset with the Illumina short reads 
 4. Use wtdbg2  (~10 minutes) or flye (~15 minutes) again to assemble the now high-quality long reads
 
 ### Evaluating Assembly Exercises
@@ -259,7 +262,9 @@ In the folder ```longRead/assemblies``` you have the outputs from the Assemblies
 ```
 spades-illumina.fasta               Illumina alone Assembly
 wtdbg_assembly.cns.fa               WTDBG2 alone Assembly
+flye_raw_assembly.fasta		    Flye raw data Assembly
 polished_wtdbg_assembly.cns.fa      WTDBG2 Assembly after FMLRC polishing
+polished_flye_assembly.fasta	    Flye data Assembly after FMLRC polishing
 spades-ill-and-pb.fasta             Spades default hybrid mode (Illumina & pacBio comibined)
 spades-ill-and-pb-careful.fasta     Spades Hybrid mode with 'careful' parameter
 ```
