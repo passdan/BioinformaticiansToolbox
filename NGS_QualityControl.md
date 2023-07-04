@@ -99,8 +99,8 @@ $ fastp --in1 Input_1.fastq    --in2 Input_2.fastq    \
 
 ### EXERCISE: fastp trimming and QC check
 
-1. Use fastp to process the illumina paired end data and inspect the html output file
-2. Use the --cut_front parameter to apply a sliding window filtering. Try with a quality filter of >30.
+1. Use fastp with defaults parameters to process the illumina paired end data and inspect the html output file
+2. Use the --cut_right parameter to apply a sliding window filtering. Default is Q20 Try with a quality filter of >30.
 3. Repeat the fastQC assessment of the resulting file
 
 <details>
