@@ -95,9 +95,17 @@ During assembly, wtdbg2 chops reads into 1024bp segments, merges similar segment
 Wtdbg2 has two key components: an assembler wtdbg2 and a consenser wtpoa-cns. Executable wtdbg2 assembles raw reads and generates the contig layout and edge sequences in a file "ctg.lay.gz". Executable wtpoa-cns takes this file as input and produces the final consensus in FASTA. A typical workflow looks like this:
 
 The basic command is as such, assigning parameters for number of threads (-t), technology (-x), genome size (-g), and output format (-o), and a second step
+
+Note for the -x parameter for choosing the technology
+- ```ont``` for Oxford Nanopore
+- ```rs``` for PacBio RSII
+- ```sq``` for PacBio Sequel
+- ```ccs``` for PacBio CCS reads
+
+It is a two step process:
 ```
 $ wtdbg2 -x rs -g 4.6m -t 4 -i ERR022075_PacBio.fastq -fo wtdgb2_raw
-$ wtpoa-cns -t 4 -i wtdgb2_raw.ctg.lay.gz -fo wtdgb2_raw.fasta
+$ wtpoa-cns -t 4 -i wtdgb2_raw.ctg.lay.gz -fo wtdgb2_raw_assembly.fasta
 ```
 
 
@@ -183,9 +191,10 @@ $ quast.py *fasta
 To run Quast on one sample in a docker container:
 ```
 $ docker run --rm \
--v $(pwd):/in -w /in \
-reslp/quast:5.0.2 \
-quast.py my_genome.fasta
+  -u $(id -u):$(id -g) \
+  -v $(pwd):/in -w /in \
+  reslp/quast:5.0.2 \
+      quast.py my_genome.fasta
 ```
 
 Quast makes a simple text output of the results, but my favourite view is the html, so I recommend downloading the whole result folder and exploring it.
@@ -204,6 +213,28 @@ $ docker run --rm \
         -l gammaproteobacteria_odb10 \
         --mode genome -c 4 -f 
 ```
+However if running busco on multiple genomes then it's easier to put it in a loop! (Here named ```busco_loop.sh```)
+```
+#!/bin/bash
+for i in *fa*
+do
+    name=${i%.*}
+
+    busco --in $i  \
+          --out busco-$name \
+          -l gammaproteobacteria_odb10 \
+          --mode genome -c 4 -f
+done
+```
+and run the script once:
+```
+$ docker run --rm \
+    -u $(id -u):$(id -g) \
+    -v $(pwd):/in -w /in  \
+    ezlabgva/busco:v5.3.2_cv1 \
+        ./busco_loop.sh
+```
+
 
 Inside the output folder there is a file named ```short_summary_busco-………txt``` with the relevant information i.e.:
 
@@ -237,7 +268,7 @@ The processing of this data takes quite a long time! After all, it is Whole Geno
 
 Docker generic command:
 ```
-$ docker run --rm -v $(pwd):/in -w /in 
+$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in 
 ```
 Optional docker containers for different program running:
 ```
@@ -251,7 +282,7 @@ Note: All steps have been completed and are available in ~/Share/Day3/Assemblies
 
 ### Assembly Exercises:
 Estimated times are using 4 CPUs: 
-1. Using spades, assemble the 1% illumina short reads on their own and evaluate the resulting assembly (~10 minutes) 
+1. [__Skip this for now, and do the long read assemblies!__] Using spades, assemble the 1% illumina short reads on their own and evaluate the resulting assembly (~10 minutes) 
 2. Using wtdbg2 (~10 minutes) or flye  (~15 minutes), assemble the raw PacBio data alone
 3. Use FMLRC2 (~5 minutes when using the pre-generated index) to correct the PacBio dataset with the Illumina short reads 
 4. Use wtdbg2  (~10 minutes) or flye (~15 minutes) again to assemble the now high-quality long reads
@@ -272,3 +303,32 @@ spades-ill-and-pb-careful.fasta     Spades Hybrid mode with 'careful' parameter
 1. Use quast.py with all assembled genome fasta files together to judge the assemblies
 2. Use busco to determine the completeness of the assemblies
 3. Determine which assembly is best!
+
+
+<details>
+  <summary>
+
+  ### Extension: Annotate the genome
+
+  </summary>
+
+### Prokka
+Source: https://github.com/tseemann/prokka
+
+In this session we have been doing an assembly of a bacterial genome which is pretty simple to annotate (none of those annoying introns or big repeats).
+
+We'll learn about annotating complex genomes later, but for bacteria then a simple prokka command does 99% of the work automatically! This is all down to the incredible work of Torsten Seemann and creating Prokka which is a great piece of software!
+
+
+ 1. Lets annotate the polished flye assembly
+ ```
+ docker run --rm \
+    -u $(id -u):$(id -g) \
+    -v $(pwd):/in -w /in \
+    staphb/prokka:latest \
+        prokka polished_flye_assembly.fasta
+```
+2. Read the gtf file that was generated. Try using grep to find the 16S gene, or another favourite gene of yours!
+3. Later, we will look at visualising genome annotations!
+
+</details>
