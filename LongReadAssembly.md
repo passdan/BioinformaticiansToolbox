@@ -111,6 +111,7 @@ $ wtpoa-cns -t 4 -i wtdgb2_raw.ctg.lay.gz -fo wtdgb2_raw_assembly.fasta
 
 ### Flye 
 Source: https://github.com/fenderglass/Flye
+
 Flye is a de novo assembler for single molecule sequencing reads, such as those produced by PacBio and Oxford Nanopore Technologies. Flye is using repeat graph as a core data structure. In difference to de Bruijn graphs (which require exact k-mer matches), repeat graphs are built using approximate sequence matches, and can tolerate higher noise of SMS reads.
 
 The edges of repeat graph represent genomic sequence, and nodes define the junctions. Each edge is classified into unique or repetitive. The genome traverses the graph (in an unknown way), so as each unique edge appears exactly once in this traversal. Repeat graphs reveal the repeat structure of the genome, which helps to reconstruct an optimal assembly.
