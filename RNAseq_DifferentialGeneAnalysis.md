@@ -33,10 +33,15 @@ When doing the analysis we will generate comparisons between Control, Duplicatio
 ## Performing a Differential Gene Expression analysis
 
 We can use R on the command line to run the DESeq2/Sartools script (you could also run this in RStudio directly on your own computer). 
-1. Copy the Rscript ```RNAseq-deseq2-sartools-complete.r``` to your local directory 
-2. View and edit the Rscript to confirm the file locations and which dataset you are analysing (```rmdup/markdup```), and we will test the parameters first
+1. Copy the folder RNAseq-Analysis to your local directory, and then enter it.
 ```
-$ head -n61 R-scripts/RNAseq-deseq2-sartools-complete.r > parameter_test.r
+$ cp -r ~/Share/Day4/RNAseq-Analysis .
+```
+2. View and edit the Rscript to confirm the file locations and choose your parameters and testing i.e. Which condition you are testing or whether to remove duplicates or not (we can run with default for now). 
+
+Lets first test the parameters by processing the first lines of the script:
+```
+$ head -n64 Sartools-template-deseq2.r > parameter_test.r
 ```
 ```
 $ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in \
@@ -49,12 +54,24 @@ If everything comes back successful (no errors!), then we can run the full scrip
 $ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in \
     -v ~/Share/REFS/RNAseqREFS:/REFS \
     -w /in chrishah/r-sartools-plus:2b95eaa \
-    Rscript R-scripts/RNAseq-deseq2-sartools-complete.r
+    Rscript Sartools-template-deseq2.r
 ```
 3. This will have created a html output and a folder of tables. Download and inspect the outputs.
 
 ## Generating Heatmaps
 We are going to use RStudio to investigate the data we have generated. If you already use RStudio on your own computer you can do that, or you can [connect to it on the server with these instructions](https://docs.google.com/document/d/1SlwJ1okSSg0TuIT8M9nIooK9bHIi60gEMljR4TJ5-rY/edit?usp=sharing).
+
+You could also directly run the heatmap generating scripts with standard R (this generates a pdf named ```Rplots.pdf```) like so:
+```
+$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in \
+    chrishah/r-sartools-plus:2b95eaa \
+    Rscript R-scripts/RNAseq-SimpleHeatmap.r
+```
+```
+$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in \
+    chrishah/r-sartools-plus:2b95eaa \
+    Rscript R-scripts/RNAseq-ComplexHeatmap.r
+```
 
 Firstly, pick a comparison you are most interested in (Deletion vs Duplication vs Control)
 1. Open and look at the most differentially expressed genes in the outputted tables (on your own computer with excel/Google Sheets etc)
@@ -75,6 +92,9 @@ Example code, where A & B is your choice of Deletion/Duplication/Control:
 $ head -n1 AvsB.complete.txt > AvsB.ASD.txt
 $ grep -f gene_list.txt AvsB.complete.txt >> AvsB.ASD.txt
 ```
+
+You can now use that file for your heatmap generation using the same method as above
+
 </details>
 
 # Funtional and Network Analysis
