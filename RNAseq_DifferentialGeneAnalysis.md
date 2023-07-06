@@ -45,14 +45,12 @@ $ head -n64 Sartools-template-deseq2.r > parameter_test.r
 ```
 ```
 $ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in \
--v ~/Share/REFS/RNAseqREFS:/REFS \
--w /in chrishah/r-sartools-plus:2b95eaa \
-Rscript parameter_test.r
+    -w /in chrishah/r-sartools-plus:2b95eaa \
+    Rscript parameter_test.r
 ```
 If everything comes back successful (no errors!), then we can run the full script
 ```
 $ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in \
-    -v ~/Share/REFS/RNAseqREFS:/REFS \
     -w /in chrishah/r-sartools-plus:2b95eaa \
     Rscript Sartools-template-deseq2.r
 ```
