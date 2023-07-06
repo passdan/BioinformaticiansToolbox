@@ -52,7 +52,7 @@ Using the pre-made scripts perform the steps on three pairs of fastq files. Ther
 1. Open and read the 5 scripts to understand what their functions are
 2. QC and trim your sample data (script 1)
 3. Use your trimmed data as inputs to run star (script 3)
-4. Use the outputs from star to run mark duplicates to both remove and keep duplicates (two outputs) (script 4)
+4. Use the outputs from star to run mark duplicates (script 4)
 5. Use the outputs to each of these to run featureCounts on the data (script 5)
 
 <details>
