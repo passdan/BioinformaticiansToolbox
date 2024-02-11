@@ -18,19 +18,6 @@
 ## General Reminders!
 There is a lot of information in this booklet that is to help you with linux in general. Not every command applies right now and some are examples. You should only do the questions that follow the red EXERCISES, not every bit of code!
 
-### Things to check when you first have an error:
-- You don’t need to type the $ at the beginning of a command. That’s a linux convention to indicate a command line
-- Pressing up brings up the last command!
-- If you have a “file not found” error, use ls to see if you can see it. If you can’t see it, the computer can’t!
-- If you can’t see a file you expect, do pwd and check you’re in the right folder.
-- Always tab-complete! It’ll stop most typo errors from happening.
-- If a script says “permission denied” make sure:
-  - It has “executable” permission (+x).
-  - You’re not inside the Share folder.
-- You have a “cheatsheet” file that has a list of common commands, which will come in very useful!
-- Never use spaces or characters other than _ or - in file or folder names! 
-- If you are trapped, pressing control and C will often escape from the error. Pressing q closes most manuals or ‘less’ windows, and :wq for vim
-
 ### When connecting to the server:
 - Server IP address:  Changes daily
 - Your username:      user + number i.e. user1, user25
@@ -421,78 +408,20 @@ $ fastqc $workingdir/Illumina_1.fastq
 
 This is also the format for adding a folder to the PATH so that you can call programs from a local folder. It is not important at this stage, but we will use this format later in the week.
 
-## Loops – When processing lots of data
+## That's it!
+If you've got all that then you should be good with 99% of working on the command line and doing work in linux. You don't have to memorise everything, you can always have this document open in the background or the Linux Cheatsheet.
 
-A ‘for loop’ in linux allows you to run the same command repeatedly, with slight change i.e. for lots of different files, or changing a parameter for each loop. 
+As you work through things in linux, here's a few tips of things to check when you first have an error. Something doesn't work, come back here first!
 
-The ```$``` character says that what follows is a variable, and the ```{i}``` is the name of the variable. All the commands in the loop need to be surrounded by ‘do’ and ‘done’
-
-### LOOPS USING NUMERICAL VARIABLES
-To run a command repeatedly but changing the parameter k each time
-```
-for i in {1..25}
-do
-   myCommand.py -k ${i} myFile.fasta
-done
-```
-
-### LOOPS USING STRINGS (LISTS) AS VARIABLES
-1. To run a command repeatedly but changing the input file each time:
-```
-for i in *fastq
-do
-   myCommand.py -k 7 ${i}
-done
-```
-
-2. Alternative method creating a list of IDs:
-```
-# List of sample 'root' names
-list=("sample1" "sample2" "sample3")
-
-for i in ${list[@]}
-do
-  myCommand.py ${i}_1.fastq ${i}_2.fastq ....
-done
-```
-
-3. Alternative reading a list of files from a text file:
-```
-## Samples read in from a text file
-for i in $(cat listOfFiles.txt)
-do
-  myCommand.py ${i}_1.fastq ${i}_2.fastq ....
-done
-```
-
-### EXERCISES
-1. Make a new script using nano or vi and print out the number of the run using this script:
-```
-#!/bin/bash
-
-for i in {10..1}
-do
-   echo "T-minus: $i"
-done
-echo 'Blastoff!'
-```
-
-2. Remember to make the script executable once made! 
-3. Think about: How is this script different to the countdown one we made earlier?
-
-<details>
-  <summary>
-  
-  ### [EXTENSION]
-  
-  </summary>
-  
-1. Write a script that will run fastqc on each of the four fastq files in the folder Day1/looping but only writing the command once.
-2. Add fastp trimming to your script!
-3. Repeat fastqc on the trimmed data, all in one script!
-
-It might seem simple now but will be really useful when working with lots of files! (Example 3 (list of files) is the version that will scale up best to lots of files).
-</details>
-
-And just in case you forget for vi (this is to exit without saving!):
-![](images/exit-vi.png)
+### Tips
+- You don’t need to type the $ at the beginning of a command. That’s a linux convention to indicate a command line
+- Pressing up brings up the last command!
+- If you have a “file not found” error, use ls to see if you can see it. If you can’t see it, the computer can’t!
+- If you can’t see a file you expect, do pwd and check you’re in the right folder.
+- **Always tab-complete!** It’ll stop most typo errors from happening.
+- If a script says “permission denied” make sure:
+  - It has “executable” permission (+x).
+  - You’re not inside the Share folder.
+- You have a “cheatsheet” file that has a list of common commands, which will come in very useful!
+- Never use spaces or characters other than _ or - in file or folder names! 
+- If you are trapped, pressing control and C will often escape from the error. Pressing q closes most manuals or ‘less’ windows, and :wq for vim
