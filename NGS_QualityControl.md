@@ -115,7 +115,7 @@ $ fastp --in1 Input_1.fastq    --in2 Input_2.fastq    \
 </details>
 
 ## Trimmomatic 
-Note: I have included trimmomatic here for historic purposes. It is still a major tool and part of many people's pipelines, however I typically adivse people to use fastp now.
+**Note**: I have included trimmomatic here for historic purposes. It is still a major tool and part of many people's pipelines, however I adivse people to use fastp now.
 
 __Summary__: Trimmomatic is (was) a fast, multithreaded command line tool that can be used to trim and crop Illumina (FASTQ) data as well as to remove adapters. These adapters can pose a real problem depending on the library preparation and downstream application. 
 

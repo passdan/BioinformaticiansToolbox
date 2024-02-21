@@ -11,9 +11,7 @@
 - [Editing files](#editing-files)
 - [Running and Reusing Scripts](#running-and-reusing-scripts)
 - [Querying files with Grep](#querying-files-with-grep)
-- [Shortcuts](#shortcuts)
-- [Loops – When processing lots of data](#loops-–-when-processing-lots-of-data)
-
+- [Reminders & Tips](#tips)
 
 ## General Reminders!
 There is a lot of information in this booklet that is to help you with linux in general. Not every command applies right now and some are examples. You should only do the questions that follow the red EXERCISES, not every bit of code!
@@ -312,14 +310,16 @@ $ /home/user1/scripts/myScript.py  parameters   arguments
 ### EXERCISES
 1. Open a new file using nano or vi, copy the script below into your file, save, make it executable and run it!
 
-Note the first line of the script, called the shebang line and is essential to include. This tells the computer what programming language the script is written in (this one is a bash script which is the basic terminal format). As it is a bash script, use the suffix “.sh” for your file.
-
 Script:
 ```
 #!/bin/bash
 echo {10..1}
 echo 'Blast off'
 ```
+Note the first line of the script, called the shebang line and is essential to include. This tells the computer what programming language the script is written in (this one is a bash script which is the basic terminal format). 
+
+As it is a bash script, use the suffix “.sh” for your file.
+
 <details>
   <summary>
   
@@ -384,29 +384,6 @@ Each sequence in a fasta file starts with a header line that begins with a ```>`
 
 An easier version of this shown as the second example uses the grep -c argument that returns the number of matches found immediately.
 </details>
-
-## Shortcuts
-
-Often it can become frustrating writing long pathways every time you need to change directory or access a file. You can create a shortcut using the ln command as so:
-```
-$ ln -s TARGET LINK_NAME
-```
-For example to make a shortcut named ‘rawdata’ to a server location:
-```
-$ ln -s /mnt/cluster/server/data/ubuntu/ rawdata
-```
-This will create a shortcut in that folder so that we can access it easily. 
-
-When working within scripts or bash commands you can also give shortcuts to files using the following syntax i.e.
-```
-$ workingdir=/mnt/clusters/server/data/ubuntu/intro
-```
-And following that it can be referred to using the $ character:
-```
-$ fastqc $workingdir/Illumina_1.fastq
-```
-
-This is also the format for adding a folder to the PATH so that you can call programs from a local folder. It is not important at this stage, but we will use this format later in the week.
 
 ## That's it!
 If you've got all that then you should be good with 99% of working on the command line and doing work in linux. You don't have to memorise everything, you can always have this document open in the background or the Linux Cheatsheet.

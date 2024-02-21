@@ -36,14 +36,26 @@ done
 3. Alternative reading a list of files from a text file:
 ```
 ## Samples read in from a text file
-for i in $(cat listOfFiles.txt)
+for i in $(cat listOfSamples.txt)
 do
   myCommand.py ${i}_1.fastq ${i}_2.fastq ....
 done
 ```
 
+Similarly, without needing to create a list file we can list all of the R1 files. Here is something more complex which takes all of the forward files in a pair of fastqs, and extracts just the name:
+```
+## Samples read from the terminal
+for file in $(ls *R1.fastq)
+do
+  R1=$(basename $file | cut -f1 -d.)
+  base=$(echo $R1 | sed 's/_R1$//')
+  myCommand.py ${base}_1.fastq ${base}_2.fastq ....
+done
+```
+
 ### EXERCISES
-1. Make a new script using nano or vi and print out the number of the run using this script:
+#### Exercise 1
+1. Make a new script using nano or vi and run the following script:
 ```
 #!/bin/bash
 
@@ -59,14 +71,13 @@ echo 'Blastoff!'
 
 
 And just in case you forget for vi (this is to exit without saving!):
-![](images/exit-vi.png)
+![exit vi](images/exit-vi.png)
 
-  ### [EXTENSION]
-  
-  
+#### Exercise 2
 1. Write a script that will run fastqc on each of the four fastq files in the folder Day1/looping but only writing the command once.
-2. Add fastp trimming to your script!
-3. Repeat fastqc on the trimmed data, all in one script!
+
+### [Extension]
+2. Once the fastqc loop in step one is working, add fastp trimming to your script!
+3. Once both steps are working, repeat fastqc on the trimmed data, and run multiqc on all the outputs.
 
 It might seem simple now but will be really useful when working with lots of files! (Example 3 (list of files) is the version that will scale up best to lots of files).
-

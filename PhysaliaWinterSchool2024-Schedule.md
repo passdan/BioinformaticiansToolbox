@@ -21,27 +21,32 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 We have some materials that we recommend reading before the course. All essential materials will be covered during the course, but a little preparation will help you gain the most from the course. Previous participants regularly say they benefitted from it!
  - [Fundamentals of Linux - The bioinformatics environment]()
 
+**Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course.
+
+If you're not on a course and some steps don't make sense you may want to go sign up for a course!
+
 ### Day 1
 - Accessing the bioinformatics cloud Image 
-- Review of Linux basics - [Presentation]() |  [Practical](Introduction_to_Linux.md)
-- NGS data and Quality Control - How well did my sequencing run work? - [Presentation]() |  [Practical](NGS_QualityControl.md)
-- Linux methods for multiple sample handling -  [Practical](Looping_in_Linux.md)
+- [Review of Linux basics](Introduction_to_Linux.md)
+- [NGS data and Quality Control - How well did my sequencing run work?](NGS_QualityControl.md)
+- [Linux methods for multiple sample handling](Looping_in_Linux.md)
 
 ### Day 2
-- Using Docker & Singularity for reproducible bioinformatics - [Presentation]() |  [Practical](Using_Containers.md)
-- Short-read Genome Assembly - [Presentation]() |  [Practical]()
-- Assessing Assembly Quality - [Presentation]() |  [Practical]()
+- [Using Docker & Singularity for reproducible bioinformatics](Using_Containers.md)
+- [Short-read Genome Assembly]()
+- [Assessing Assembly Quality]()
 
 ### Day 3
-- Assembly with long read data - Nanopore/PacBio & hybrid assemblies - [Presentation]() |  [Practical](LongReadAssembly.md)
-- Genome Annotation - [Presentation]() |  [Practical]()
-- Genome Visualisation - [Presentation]() |  [Practical]()
+- [Assembly with long read data - Nanopore/PacBio & hybrid assemblies](LongReadAssembly.md)
+- [Genome Annotation]()
+- [Genome Visualisation]()
 
 ### Day 4
-- RNAseq Processing and Transcriptomics - [Presentation]() | [Practical](RNAseq_Processing.md)
-- Differential Gene Analysis - [Presentation]() |  [Practical](RNAseq_DifferentialGeneAnalysis.md)
-- Downstream RNAseq Interpretation - [Presentation]() |  [Practical]()
+- [Phylogenetics and Phylogenomics]()
+- [Bioinformatic analysis with pipelines]()
+- [Overview of server queueing with SLURM](Queueing_with_SLURM.md)
 
 ### Day 5
-- Phylogenetics and Phylogenomics - [Presentation]() |  [Practical]()
-- Bioinformatic analysis with pipelines - [Presentation]() |  [Practical]()
+- [RNAseq Processing and Transcriptomics](RNAseq_Processing.md)
+- [Differential Gene Analysis](RNAseq_DifferentialGeneAnalysis.md)
+- [Downstream RNAseq Interpretation]()
