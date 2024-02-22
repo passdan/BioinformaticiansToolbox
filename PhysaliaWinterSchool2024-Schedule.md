@@ -43,8 +43,10 @@ If you're not on a course and some steps don't make sense you may want to go sig
 
 ### Day 4
 - [Phylogenetics and Phylogenomics]()
-- [Bioinformatic analysis with pipelines]()
-- [Overview of server queueing with SLURM](Queueing_with_SLURM.md)
+- Bioinformatic analysis with pipelines
+  - [Snakemake]()
+  - [Nextflow](A_breif_view_on_nextflow.md)
+- [Job Queueing & SLURM](Queueing_with_SLURM.md)
 
 ### Day 5
 - [RNAseq Processing and Transcriptomics](RNAseq_Processing.md)
