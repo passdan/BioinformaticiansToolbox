@@ -2,7 +2,7 @@
 ### Setup
 If you have already copied the Day1 folder, move into it using ```cd```. Otherwise, this should be in: 
 ```
-~/Share/Day1
+~/Shared_folder/Day1
 ```
 Use ls to check that you can see the data in this folder.
 
@@ -147,7 +147,7 @@ $ trimmomatic PE inputFile1_1.fastq inputFile_2.fastq -baseout samples_trimmo.fa
 
 You must also provide the parameters for trimming. Below is a good default set that you shouldn’t need to change unless with noisy data. The [parameters]:
 ```
-ILLUMINACLIP:/home/ubuntu/Share/bin/Trimmomatic-0.39/adapters/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15
+ILLUMINACLIP:/home/ubuntu/Shared_folder/bin/Trimmomatic-0.39/adapters/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15
 ```
 
 Note: You will need to change the adapter file based on if you are using single/paired data.

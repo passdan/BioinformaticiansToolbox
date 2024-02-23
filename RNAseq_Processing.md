@@ -14,13 +14,13 @@ This data comes from a paper looking at the chromatin organisation within the Ar
 
 Full data is available here: https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
 
-We will be using  scripts to run these steps. In the Share/Day4 folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names. 
+We will be using  scripts to run these steps. In the ```Shared_folder/Day5``` folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names. 
 
 So far we have used only a small dataset to quickly practice the steps but now we’ll be using full sized RNAseq samples. This is because otherwise it causes the programs to think it’s bad data and causes errors. 
 
-In the Share/Day4 folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder Share/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
+In the ```Shared_folder/Day5``` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder ```Shared_folder/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
 ```
-$ ls Share/Day4/Processing:
+$ ls Shared_folder/Day5/RNAseq-Processing:
 1-QC.sh  
 2-star_index_genome.sh  (already done, don’t repeat!)
 3-star.sh  
@@ -28,12 +28,12 @@ $ ls Share/Day4/Processing:
 5-featurecounts.sh 
 ```
 ```
-$ ls Share/Day4/fastqs
+$ ls Shared_folder/Day5/RNAseq-Processing/fastqs
 SRR5222797_1.fastq    SRR5222797_2.fastq
 SRR5222798_1.fastq    SRR5222798_2.fastq
 SRR5222799_1.fastq    SRR5222799_2.fastq
 
-$ ls Share/REFS
+$ ls Shared_folder/Day5/REFS
 Arabidopsis_thaliana.TAIR10.47.gtf
 Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa
 ……… <Lots of other index files for star to function that you don’t need to touch!>
@@ -43,21 +43,20 @@ Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa
 
 We will be using a docker container with all of the tools in. All steps are done with this one container, for example for the first QC processing :
 ```
-$ docker run \
-	-u $(id -u):$(id -g) \
-	-v $(pwd):/data \
-	-v /home/ubuntu/Share/REFS/RNAseqREFS:/data/REFS \
-	-it passdan/rnaseq-mini ./1-QC.sh
+singularity exec docker://passdan/rnaseq-mini
+	--bind /opt/Shared_folder/Day5/REFS:/data/REFS \
+	./1-QC.sh
 ```
 
-Using the pre-made scripts perform the steps on three pairs of fastq files. There are examples of all of these files in the Share/Day4 directory which you should copy into your own folder. You may need to edit them to represent your own working folder and filenames:
+Using the pre-made scripts perform the steps on three pairs of fastq files. There are examples of all of these files in the ```Shared_folder/Day5``` directory which you should copy into your own folder. You may need to edit them to represent your own working folder and filenames:
 
-0. Copy the folder ```~/Share/Day4/RNAseq-Processing``` to your local directory and enter it.
+0. Copy the folder ```~/Shared_folder/Day5/RNAseq-Processing``` to your local directory and enter it.
 1. Open and read the 5 scripts to understand what their functions are
 2. QC and trim your sample data (script 1)
 3. Use your trimmed data as inputs to run star (script 3)
 4. [optional] Use the outputs from star to run mark duplicates to mark duplicates and optionally remove them (script 4)
 5. Use featureCounts to count abundance of mapped reads to each gene (script 5)
+6. Review the outputs to see what files you have created
 
 <details>
     <summary>
@@ -69,7 +68,7 @@ Using the pre-made scripts perform the steps on three pairs of fastq files. Ther
 6. Run multiQC on the processed directory using this full command (you don’t need to give any additional parameters):
 
 ```
-$  docker run --rm -v $(pwd):/in -w /in -it ewels/multiqc:v1.12 .
+singularity exec docker://multiqc/multiqc:latest multiqc .
 ```
 </details>
 	

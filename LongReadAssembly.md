@@ -24,7 +24,7 @@ The process and steps below are mostly identical for Nanopore or Pac Bio data an
 
 ## Data
 
-A set of paired genomic illumina data and corresponding PacBio data for the E. Coli is in the ~/Share/Day3 folder
+A set of paired genomic illumina data and corresponding PacBio data for the E. Coli is in the ~/Shared_folder/Day3 folder
 Illumina Data
 ```
 ERR022075_1.fastq.gz (~35m)
@@ -181,34 +181,28 @@ Two tools that can be used to judge the assembly are Quast and BUSCO. Quast eval
 ### QUAST
 To run quast is very simple, with just the command and the genome of interest:
 ```
-$ quast.py my_genome.fasta
+quast.py my_genome.fasta
 ```
 
 However you can also run it on multiple together and do direct comparisons:
 ```
-$ quast.py *fasta
+quast.py *fasta
 ```
 
 To run Quast on one sample in a docker container:
 ```
-$ docker run --rm \
-  -u $(id -u):$(id -g) \
-  -v $(pwd):/in -w /in \
-  reslp/quast:5.0.2 \
+singularity exec reslp/quast:5.0.2 \
       quast.py my_genome.fasta
 ```
 
 Quast makes a simple text output of the results, but my favourite view is the html, so I recommend downloading the whole result folder and exploring it.
 
 ### BUSCO
-We will test our genome assembly against a gammaproteobacteria database. This can be found at ```~/Share/REFS/gammaproteobacteria_odb10```
+We will test our genome assembly against a gammaproteobacteria database. This can be found at ```~/Shared_folder/REFS/gammaproteobacteria_odb10```
 
 To run BUSCO on my_genome.fasta in a docker container:
 ```
-$ docker run --rm \
-    -u $(id -u):$(id -g) \
-    -v $(pwd):/in -w /in  \
-    ezlabgva/busco:v5.3.2_cv1 \
+singularity exec docker://ezlabgva/busco:v5.3.2_cv1 \
     busco --in my_genome.fasta  \
         --out busco-my_genome \
         -l gammaproteobacteria_odb10 \
@@ -229,10 +223,7 @@ done
 ```
 and run the script once:
 ```
-$ docker run --rm \
-    -u $(id -u):$(id -g) \
-    -v $(pwd):/in -w /in  \
-    ezlabgva/busco:v5.3.2_cv1 \
+singularity exec docker://ezlabgva/busco:v5.3.2_cv1 \
         ./busco_loop.sh
 ```
 
@@ -257,7 +248,7 @@ Source: https://multiqc.info
 
 It can be run on the current directory without any further parameters (don't miss the ```.``` on the end of the line!)
 ```
-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in ewels/multiqc:v1.12 .
+singularity exec docker://multiqc/multiqc:latest multiqc .
 ```
 
 Download the html that is generated to view the outputs
@@ -267,9 +258,9 @@ Download the html that is generated to view the outputs
 The processing of this data takes quite a long time! After all, it is Whole Genome _E. coli_ long and short read data! For time we can jump straight to the outputs of these steps, however you may want to generate these outputs yourself with more time
 1. Copy the long read data to your home folder and use the docker before each command
 
-Docker generic command:
+Singularity generic command:
 ```
-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in 
+singularity exec docker://maintainer/containerName:version
 ```
 Optional docker containers for different program running:
 ```
@@ -279,7 +270,7 @@ staphb/flye
 reslp/quast:5.0.2
 ezlabgva/busco:v5.3.2_cv1
 ```
-Note: All steps have been completed and are available in ~/Share/Day3/Assemblies if you would prefer to look at the outputs rather than process the data. Step one (short read only spades assembly) specifically has been completed for you as it require huge resources.
+Note: All steps have been completed and are available in ~/Shared_folder/Day3/Assemblies if you would prefer to look at the outputs rather than process the data. Step one (short read only spades assembly) specifically has been completed for you as it require huge resources.
 
 ### Assembly Exercises:
 Estimated times are using 4 CPUs: 
@@ -323,10 +314,7 @@ We'll learn about annotating complex genomes later, but for bacteria then a simp
 
  1. Lets annotate the polished flye assembly
  ```
- docker run --rm \
-    -u $(id -u):$(id -g) \
-    -v $(pwd):/in -w /in \
-    staphb/prokka:latest \
+singularity exec docker://staphb/prokka:latest \
         prokka polished_flye_assembly.fasta
 ```
 2. Read the gtf file that was generated. Try using grep to find the 16S gene, or another favourite gene of yours!

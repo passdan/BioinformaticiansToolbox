@@ -54,7 +54,7 @@ If there are multiple options with the same beginning then pressing tab twice wi
 1. Use the ```ls``` command to see what files and folders are in your home directory
 2. Use the ```-l``` flag with ```ls``` to see the full information. What type of object is ‘Share’ ?
 3. Use ```ls``` on ‘Share’ to see what is inside the folder, and also explore the different sub-folders (use the ```/``` character between directories)
-4. Use ```ls -lh``` on the file ```Share/Day1/subsample_Ill4.fasta``` but DON'T type out all the names. Using the tab key you should only need to press about 4 or 5 letters!
+4. Use ```ls -lh``` on the file ```Shared_folder/Day1/subsample_Ill4.fasta``` but DON'T type out all the names. Using the tab key you should only need to press about 4 or 5 letters!
 
 ## Learning about Linux commands
 Most Linux commands have a manual page that provides information about the command and options that can alter its behaviour.  Linux manual pages are referred to as man pages. 
@@ -149,7 +149,7 @@ $ mv RNAseq_1.fastq LRubellus_1.fastq
 
 To copy, use the cp command. You could copy a file from another directory to “here” like so, remembering that a full-stop means “the folder I’m currently in”:
 ```
-$ cp /home/Share/Day1/RNAseq_1.fastq  .
+$ cp /home/Shared_folder/Day1/RNAseq_1.fastq  .
 ```
 Often you’ll want to copy a whole folder (directory), and you will need the -r parameter for “recursive”.
 ```
@@ -173,7 +173,7 @@ $ rsync ubuntu@123.456.789:~/RNAseq_1.fastq .
  $ pwd
  /home/user66/
  $ cd LinuxExercises
- $ cp -r ~/Share/Day1 .
+ $ cp -r ~/Shared_folder/Day1 .
  ```
 </details>
 
