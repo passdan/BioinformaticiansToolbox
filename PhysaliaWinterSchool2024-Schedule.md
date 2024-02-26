@@ -17,10 +17,6 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 
 ## Schedule
  
-### Pre-course study materials
-We have some materials that we recommend reading before the course. All essential materials will be covered during the course, but a little preparation will help you gain the most from the course. Previous participants regularly say they benefitted from it!
- - [Fundamentals of Linux - The bioinformatics environment]()
-
 **Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course.
 
 If you're not on a course and some steps don't make sense you may want to go sign up for a course!
