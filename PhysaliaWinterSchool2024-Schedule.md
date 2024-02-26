@@ -17,9 +17,7 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 
 ## Schedule
  
-**Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course.
-
-If you're not on a course and some steps don't make sense you may want to go sign up for a course!
+**Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course. If you're not on a course and some steps don't make sense you may want to go sign up for a course!
 
 ### Day 1
 - Accessing the bioinformatics cloud Image 
