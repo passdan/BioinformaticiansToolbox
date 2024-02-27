@@ -17,13 +17,7 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 
 ## Schedule
  
-### Pre-course study materials
-We have some materials that we recommend reading before the course. All essential materials will be covered during the course, but a little preparation will help you gain the most from the course. Previous participants regularly say they benefitted from it!
- - [Fundamentals of Linux - The bioinformatics environment]()
-
-**Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course.
-
-If you're not on a course and some steps don't make sense you may want to go sign up for a course!
+**Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course. If you're not on a course and some steps don't make sense you may want to go sign up for a course!
 
 ### Day 1
 - Accessing the bioinformatics cloud Image 
@@ -32,19 +26,17 @@ If you're not on a course and some steps don't make sense you may want to go sig
 - [Linux methods for multiple sample handling](Looping_in_Linux.md)
 
 ### Day 2
-- [Using Docker & Singularity for reproducible bioinformatics](Using_Containers.md)
-- [Short-read Genome Assembly]()
-- [Assessing Assembly Quality]()
+- Using [Docker](https://github.com/chrishah/docker-intro) & [Singularity](Using_Containers.md) for reproducible bioinformatics
+- [Short-read Genome Assembly](https://github.com/chrishah/short-read-processing-and-assembly)
 
 ### Day 3
+- [Genome Annotation and visualisation](https://github.com/chrishah/post-assembly-intro)
 - [Assembly with long read data - Nanopore/PacBio & hybrid assemblies](LongReadAssembly.md)
-- [Genome Annotation]()
-- [Genome Visualisation]()
 
 ### Day 4
-- [Phylogenetics and Phylogenomics]()
+- [Phylogenetics and Phylogenomics](https://github.com/chrishah/phylogenomics_intro_vertebrata)
 - Bioinformatic analysis with pipelines
-  - [Snakemake]()
+  - [Snakemake](https://github.com/chrishah/phylogenomics_intro_vertebrata)
   - [Nextflow](A_breif_view_on_nextflow.md)
 - [Job Queueing & SLURM](Queueing_with_SLURM.md)
 
