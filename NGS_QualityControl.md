@@ -47,7 +47,7 @@ $ seqtk [command] [options] input.fastq > output.fasta
 ```
 If you run ```seqtk``` with no parameters, it will show you the available options. Run ```seqtk``` and then ```seqtk seq```, and it will give you the manual for just the ```seq``` function.
 
-### EXAMPLES: Here are some potentially useful seqtk applications:
+### EXAMPLES: Here are some potentially useful seqtk application:
 __Convert from fastq to fasta:__
 ```
 $ seqtk seq [options] Illumina_1.fastq > Illumina_1.fasta
@@ -67,13 +67,27 @@ Note: If you want to use this with paired data, remember to use the same random 
 ```
 $ seqtk sample in.fq 1000 > out-1000.fq
 ```
+---
 
-### EXERCISE: MANIPULATING FASTQ DATA
-Here, I have written the tasks in normal language. The challenge for you is to convert this into the commands and code to do the processes! Remember that you can type the command with no parameters to be given the options.
-1. Convert the FASTQ file into FASTA format using seqtk seq
-2. Run seqtk trimfq to see the parameter options
-3. Choose which parameters to use with seqtk trimfq to remove 10 bp from the end of the Illumina FASTQ dataset 
-4. Re-run fastQC on the output of the trimming process and see how this has affected the data.
+### EXERCISES: MANIPULATING FASTQ DATA
+Lets trim the Illumina_1.fastq file using seqtq. Here, I have written the tasks in normal language and the challenge for you is to convert this into the commands and code to do the processes!
+
+Remember that you can type the command with no parameters to be given the options.
+1. Run seqtk trimfq to see the parameter options
+2. Choose which parameters to use with seqtk trimfq to remove 10 bp from the end of the Illumina FASTQ dataset 
+3. Re-run fastQC on the output of the trimming process and see how this has affected the data.
+
+<details>
+  <summary>
+  
+  ### EXTENSION
+  
+  </summary>
+  
+  4. Convert the FASTQ file into FASTA format using seqtk seq but MASK all bases lower than Q<30
+  5. Repeat the conversion but using the -n parameter to REPLACE the low quality bases with Ns
+
+</details>
 
 ## FastP
 Summary: A tool designed to provide fast all-in-one preprocessing for FastQ files. This tool is developed in C++ with multithreading supported to afford high performance.
@@ -100,8 +114,9 @@ $ fastp --in1 Input_1.fastq    --in2 Input_2.fastq    \
 ### EXERCISE: fastp trimming and QC check
 
 1. Use fastp with defaults parameters to process the illumina paired end data and inspect the html output file
-2. Use the --cut_right parameter to apply a sliding window filtering. Default is Q20 Try with a quality filter of >30.
+2. Use the --cut_right parameter to apply a sliding window filtering. (Default is Q20)
 3. Repeat the fastQC assessment of the resulting file
+4. [Optional] Try with a sliding window quality filter of >30!
 
 <details>
   <summary>
@@ -109,13 +124,41 @@ $ fastp --in1 Input_1.fastq    --in2 Input_2.fastq    \
   ### EXTENSION
   
   </summary>
-    4. Use the “merge” parameter to combine the overlapping paired end reads into contigs. What proportion overlap?
-    5. Repeat FastQC on this new output
+  
+  4. Use the “merge” parameter to combine the overlapping paired end reads into contigs. What proportion overlap?
+  5. Repeat FastQC on this new output
 
 </details>
 
+<details>
+  <summary>
+  
+  ### Full example command
+  
+  </summary>
+
+  Here is an example from real filtering that I ran recently, so you can see the large range of options you can apply.
+
+  ```
+  fastp   -i fastq/example_R1.fastq.gz \
+        -I fastq/example_R2.fastq.gz \
+        -o trim_fastq/example_trim_R1.fastq.gz \
+        -O trim_fastq/example_trim_R2.fastq.gz \
+        --cut_front \
+        --cut_tail \
+        --cut_window_size 4 \
+        --cut_mean_quality 30 \
+        --qualified_quality_phred 30 \
+        --unqualified_percent_limit 30 \
+        --n_base_limit 5 \
+        --length_required 60 \
+        --detect_adapter_for_pe \
+        -w 16
+  ```
+</details>
+
 ## Trimmomatic 
-**Note**: I have included trimmomatic here for historic purposes. It is still a major tool and part of many people's pipelines, however I adivse people to use fastp now.
+**Note**: I have included trimmomatic here for historic purposes. I never use it anymore however it is still a major tool and part of many people's pipelines. I'm not aware of any situations where fastp is not a better choice,other than to replicate previous work.
 
 __Summary__: Trimmomatic is (was) a fast, multithreaded command line tool that can be used to trim and crop Illumina (FASTQ) data as well as to remove adapters. These adapters can pose a real problem depending on the library preparation and downstream application. 
 
@@ -157,12 +200,12 @@ Note: You will need to change the adapter file based on if you are using single/
 <details>
   <summary>
   
-  ### EXTENSION EXERCISE: Clean the data with Trimmomatic
+  ### EXTENSION: Clean the data with Trimmomatic
   
   </summary>
 
 1. Run paired end trimmomatic with Illumina_1.fastq and Illumina_2.fastq. Don’t forget to include the parameters!
 2. Now run fastQC again on the clean and see how it has improved/changed the data.
 3. Make the sliding window quality requirement more restrictive by increasing from 15 to 30 to see the effect.
-4. Contrast Trimmomatic & fastp QC processes
+4. Contrast Trimmomatic & fastp QC processes by using fastqc on the outputs
 </details>
