@@ -43,18 +43,18 @@ Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa
 
 We will be using a docker container with all of the tools in. All steps are done with this one container, for example for the first QC processing :
 ```
-singularity exec docker://passdan/rnaseq-mini
-	--bind /opt/Shared_folder/Day5/REFS:/data/REFS \
-	./1-QC.sh
+singularity exec \
+    --bind /opt/Shared_folder/Day5/REFS:/data/REFS \
+    docker://passdan/rnaseq-mini ./1-QC.sh
 ```
 
-Using the pre-made scripts perform the steps on three pairs of fastq files. There are examples of all of these files in the ```Shared_folder/Day5``` directory which you should copy into your own folder. You may need to edit them to represent your own working folder and filenames:
+Using the pre-made scripts perform the steps on three pairs of fastq files. There are examples of all of these files in the ```Shared_folder/Day5/RNAseq-Processing``` directory which you should copy into your own folder. You may need to edit them to represent your own working folder and filenames:
 
 0. Copy the folder ```~/Shared_folder/Day5/RNAseq-Processing``` to your local directory and enter it.
-1. Open and read the 5 scripts to understand what their functions are
+1. Open and edit with your username the 5 looping scripts to understand what their functions are
 2. QC and trim your sample data (script 1)
 3. Use your trimmed data as inputs to run star (script 3)
-4. [optional] Use the outputs from star to run mark duplicates to mark duplicates and optionally remove them (script 4)
+4. Run picard MarkDuplicates to remove identified duplicates in the data (script 4)
 5. Use featureCounts to count abundance of mapped reads to each gene (script 5)
 6. Review the outputs to see what files you have created
 

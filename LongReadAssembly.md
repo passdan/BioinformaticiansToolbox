@@ -126,6 +126,8 @@ or
 $ flye --pacbio-corr ERR022075_PacBio_corrected.fasta --out-dir corr_flye_assemb --threads 4
 ```
 
+Alternate options are ```--nano-raw``` or ```--nano-corr``` for nanopore data
+
 There are a number of parameters which can improve assembly
 
 ## Long read correction and cleaning 
