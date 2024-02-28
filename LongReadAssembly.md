@@ -24,7 +24,8 @@ The process and steps below are mostly identical for Nanopore or Pac Bio data an
 
 ## Data
 
-A set of paired genomic illumina data and corresponding PacBio data for the E. Coli is in the ~/Shared_folder/Day3 folder
+A set of paired genomic illumina data and corresponding PacBio data for the E. Coli is in the ```~/Shared_folder/Day3/longRead``` folder.
+
 Illumina Data
 ```
 ERR022075_1.fastq.gz (~35m)
@@ -198,15 +199,19 @@ singularity exec reslp/quast:5.0.2 \
 Quast makes a simple text output of the results, but my favourite view is the html, so I recommend downloading the whole result folder and exploring it.
 
 ### BUSCO
-We will test our genome assembly against a gammaproteobacteria database. This can be found at ```~/Shared_folder/REFS/gammaproteobacteria_odb10```
+We will test our genome assembly against a gammaproteobacteria database. This can be downloaded straight from busco if you know the code, or list them using:
+```
+busco --list-datasets
+```
 
-To run BUSCO on my_genome.fasta in a docker container:
+To run BUSCO on my_genome.fasta in a singularity container:
 ```
 singularity exec docker://ezlabgva/busco:v5.3.2_cv1 \
     busco --in my_genome.fasta  \
-        --out busco-my_genome \
-        -l gammaproteobacteria_odb10 \
-        --mode genome -c 4 -f 
+          --out busco-my_genome \
+          -l gammaproteobacteria_odb10 \
+          --mode genome \
+          -c 4 -f 
 ```
 However if running busco on multiple genomes then it's easier to put it in a loop! (Here named ```busco_loop.sh```)
 ```
@@ -265,23 +270,25 @@ singularity exec docker://maintainer/containerName:version
 Optional docker containers for different program running:
 ```
 reslp/spades:3.15.3
-chrishah/fmlrc-wtdbg2-plus:v062022
-staphb/flye
+passdan/fmlrc2:latest
+staphb/wtdbg2:2.5
+staphb/flye:latest
 reslp/quast:5.0.2
 ezlabgva/busco:v5.3.2_cv1
 ```
-Note: All steps have been completed and are available in ~/Shared_folder/Day3/Assemblies if you would prefer to look at the outputs rather than process the data. Step one (short read only spades assembly) specifically has been completed for you as it require huge resources.
+Note: All steps have been completed and are available in ```~/Shared_folder/Day3/longReads/Assemblies``` if you would prefer to look at the outputs rather than process the data. Step one (short read only spades assembly) specifically has been completed for you as it require huge resources.
 
 ### Assembly Exercises:
 Estimated times are using 4 CPUs: 
-1. [__Skip this for now, and do the long read assemblies!__] Using spades, assemble the 1% illumina short reads on their own and evaluate the resulting assembly (~10 minutes) 
-2. Using wtdbg2 (~10 minutes) or flye  (~15 minutes), assemble the raw PacBio data alone
-3. Use FMLRC2 (~5 minutes when using the pre-generated index) to correct the PacBio dataset with the Illumina short reads 
-4. Use wtdbg2  (~10 minutes) or flye (~15 minutes) again to assemble the now high-quality long reads
+1. [__Skip this for now, and do the long read assemblies!__] Using spades, assemble the 1% illumina short reads on their own and evaluate the resulting assembly (~15 minutes) 
+2. Using wtdbg2 (~5 minutes) or flye  (~20 minutes), assemble the raw PacBio data alone
+3. Use FMLRC2 (~2 minutes when using the pre-generated index) to correct the PacBio dataset with the Illumina short reads 
+4. Use wtdbg2  (~5 minutes) or flye (~20 minutes) again to assemble the now high-quality long reads
+5. [Optional] Use spades in hybrid mode to include illumina and corrected PacBio reads together (~20 minutes)
 
 ### Evaluating Assembly Exercises
 
-In the folder ```longRead/assemblies``` you have the outputs from the Assemblies above:
+In the folder ```longRead/Assemblies``` you have the outputs from the Assemblies above:
 ```
 spades-illumina.fasta               Illumina alone Assembly
 wtdbg_assembly.cns.fa               WTDBG2 alone Assembly
