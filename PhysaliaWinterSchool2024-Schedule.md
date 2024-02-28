@@ -42,5 +42,5 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 
 ### Day 5
 - [RNAseq Processing and Transcriptomics](RNAseq_Processing.md)
-- [Differential Gene Analysis](RNAseq_DifferentialGeneAnalysis.md)
-- [Downstream RNAseq Interpretation]()
+- [RNAseq Differential Gene Analysis](RNAseq_DifferentialGeneAnalysis.md)
+- [RNAseq Downstream Interpretation](RNAseq_downstream_interpretation.md)

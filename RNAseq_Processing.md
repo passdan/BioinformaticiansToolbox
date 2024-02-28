@@ -29,12 +29,12 @@ $ ls Shared_folder/Day5/RNAseq-Processing:
 ```
 ```
 $ ls Shared_folder/Day5/RNAseq-Processing/fastqs
-SRR5222797_1.fastq    SRR5222797_2.fastq
-SRR5222798_1.fastq    SRR5222798_2.fastq
-SRR5222799_1.fastq    SRR5222799_2.fastq
+SRR5222797_10pc_1.fastq    SRR5222797_10pc_2.fastq
+SRR5222798_10pc_1.fastq    SRR5222798_10pc_2.fastq
+SRR5222799_10pc_1.fastq    SRR5222799_10pc_2.fastq
 
 $ ls Shared_folder/Day5/REFS
-Arabidopsis_thaliana.TAIR10.47.gtf
+Arabidopsis_thaliana.TAIR10.53.gtf
 Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa
 ……… <Lots of other index files for star to function that you don’t need to touch!>
 ```
