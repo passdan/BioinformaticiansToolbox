@@ -192,7 +192,7 @@ quast.py *fasta
 
 To run Quast on one sample in a docker container:
 ```
-singularity exec reslp/quast:5.0.2 \
+singularity exec docker://reslp/quast:5.0.2 \
       quast.py my_genome.fasta
 ```
 
