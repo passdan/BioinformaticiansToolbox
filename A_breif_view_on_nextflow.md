@@ -65,11 +65,16 @@ executor >  local (3)
 ```
 Each process is listed and the pipeline was ran with default parameter. 
 
-Now lets give it some more data. Any parameter can be changed from the command line when running using ```--``` and the parameter name. Let's give it multiple genes:
+Now lets give it some more data. Any parameter can be changed from the command line when running using ```--``` and the parameter name. This script is set up to accept a list of genes separated by commas. 
+
+Let's give it multiple genes:
 
 ```
 nextflow run nextflow_gene_lister.nf --str \
-"GTCTgggggATCTcccCTGACGT,AAAAATGCTATAAAAGCCCTTTTGCTGGGG,TTGCATGCTACGGGTCATGGTCGGAAAAAATTTGCaaaaaaaaaa,atgGTCAGTCATGCATGCTA"
+    "GTCTgggggATCTcccCTGACGT,\
+    AAAAATGCTATAAAAGCCCTTTTGCTGGGG,\
+    TTGCATGCTACGGGTCATGGTCGGAAAAAATTTGCaaaaaaaaaa,\
+    atgGTCAGTCATGCATGCTA"
 ```
 As you see in the output, there are 4 processes in convertToUpper, as each split gene has been turned into it's individual item.
 ```
@@ -87,7 +92,7 @@ Sometimes processes will go wrong or break for reasons such as ran out of memory
 
 In the script you copied, there is also an additional function: ```ATCalc```. This calls an outside program named ```AT_pc_calc.py``` to calculate the AT% of each gene. Plus it demonstrates how easy it is to call outer packages.
 
-Lets look at what has changed.
+Lets look at what that does:
 ```
 process ATCalc {
     input:
@@ -111,7 +116,12 @@ workflow {
 
 Lets uncomment the call to ATCalc, and run the nextflow script again, but this time using the ```-resume``` parameter.
 ```
-nextflow run nextflow_gene_lister.nf --str "GTCTgggggATCTcccCTGACGT,AAAAATGCTATAAAAGCCCTTTTGCTGGGG,TTGCATGCTACGGGTCATGGTCGGAAAAAATTTGCaaaaaaaaaa,atgGTCAGTCATGCATGCTA" -resume
+nextflow run nextflow_gene_lister.nf --str \
+    "GTCTgggggATCTcccCTGACGT,\
+    AAAAATGCTATAAAAGCCCTTTTGCTGGGG,\
+    TTGCATGCTACGGGTCATGGTCGGAAAAAATTTGCaaaaaaaaaa,\
+    atgGTCAGTCATGCATGCTA" \
+    -resume
 ~~~~~
 [88/1b102a] process > splitGeneList      [100%] 1 of 1, cached: 1 ✔
 [5d/cdfbae] process > convertToUpper (3) [100%] 4 of 4, cached: 4 ✔
@@ -120,7 +130,7 @@ nextflow run nextflow_gene_lister.nf --str "GTCTgggggATCTcccCTGACGT,AAAAATGCTATA
 Notice how the first two steps (which were completed before we added the extra function) were 'cached', so they weren't processed again. Can be a big time saver!
 
 ## Using containers in nextflow
-You can instruct your pipeline to use singularity, docker, conda or several other instalation methods. That allows you to specify a codeblock such as this, often in a config file.
+You can instruct your pipeline to use singularity, docker, conda or several other instalation methods with the ```-pipeline``` parameter. That allows you to specify a codeblock such as this, often in a config file.
 
 Here, any process labelled 'trimming' will use the container as found on dockerhub:
 ```
@@ -140,13 +150,15 @@ This is defined to use singularity for all programmes (no installations required
 ```
 nextflow run nf-core/bamtofastq -r 2.1.0 \
     -profile singularity \
-    --input bam_samplesheet.csv \
+    --input ~/Shared_folder/nextflow/bam_samplesheet.csv \
     --outdir bc2fq_output \
     --max_cpus 2 \
     --max_memory 8.GB
 ```
 
-In this case, it is accessing the code from the nf-core repository, however often you'll want to download it and edit the configuration files yourself. That can be done with the clone command, and then the pipeline ran as above:
+In this case, it is accessing the code from the nf-core repository, however often you'll want to download it and edit the configuration files yourself. 
+
+That can be done with the clone command. Read the parameters some of the parameterand then the pipeline ran as above:
 ```
 nextflow clone nf-core/bamtofastq
 ~~~~~~~
