@@ -18,7 +18,7 @@ We will be using  scripts to run these steps. In the ```Shared_folder/Day5``` fo
 
 So far we have used only a small dataset to quickly practice the steps but now we’ll be using full sized RNAseq samples. This is because otherwise it causes the programs to think it’s bad data and causes errors. 
 
-In the ```Shared_folder/Day5``` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder ```Shared_folder/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
+In the ```Shared_folder/Day5/RNAseq-Processing``` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder ```Shared_folder/Day5/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
 ```
 $ ls Shared_folder/Day5/RNAseq-Processing:
 1-QC.sh  
