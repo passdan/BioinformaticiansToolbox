@@ -7,6 +7,7 @@ We will here look at some of the processing steps and analysis methods for worki
 
 
 
+
 ## Data 
 Here we will work with a selection of paired-end illumina data from a study on termite gut bacterial communities:
 >  _**Phylogenomic analysis of 589 metagenome-assembled genomes encompassing all major prokaryotic lineages from the gut of higher termites**_ Herve et. al, (2020) [10.7717/peerj.8614](https://peerj.com/articles/8614)
@@ -34,7 +35,7 @@ In the following examples I have used ${sampleID} in place of the name of the fi
 
 ```
 # Example:
-export sampleID=SRR10512955
+export sampleID=SRR10512955_1pc
 echo ${sampleID}_R1.fastqc.gz
 ```
 
@@ -107,8 +108,9 @@ fastp   -i ~/Shared_folder/Metagenomics/fastq/${sampleID}_R1.fastq.gz \
         --length_required 80 \
         --detect_adapter_for_pe \
         -w 4
-
 ```
+
+Now would be a good time to repeat the fastqc process, to see how the data has changed compared to the raw data!
 
 ### [Optional] Host removal using Bowtie2
 Depending on if you are assembling a host-associated metagenome then you likely will want to make sure that the sequences from the host have been removed before assembly. However, this requires you to have the host genome available.
