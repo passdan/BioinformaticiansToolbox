@@ -14,7 +14,7 @@ We will here look at some of the processing steps and analysis methods for worki
 	* 4.3. [MetaPhlAn: Taxonomic profiling](#MetaPhlAn:Taxonomicprofiling)
 	* 4.4. [[Optional] Kraken taxonomic filtering](#OptionalKrakentaxonomicfiltering)
 * 5. [Session: Metagenome Assembly](#Session:MetagenomeAssembly)
-	* 5.1. [Single assembly](#Singleassembly)
+	* 5.1. [Single assembly with spades](#Singleassemblywithspades)
 * 6. [Assessing the assembly](#Assessingtheassembly)
 	* 6.1. [Bandage assembly graph](#Bandageassemblygraph)
 * 7. [Session: Binning & Reconstruction](#Session:BinningReconstruction)
@@ -291,7 +291,7 @@ An alternative popular tool is MEGAHIT which runs faster and uses less computing
 
 Once we've assembled, we want to check the length and quality of contigs and see how complete our genome is. Longer contigs indicate better assembly (usually).
 
-###  5.1. <a name='Singleassembly'></a>Single assembly with spades
+###  5.1. <a name='Singleassemblywithspades'></a>Single assembly with spades
 
 - **Input:** Paired non-host reads in FASTQ format (e.g., non_host_reads_R1.fastq.gz, non_host_reads_R2.fastq.gz).
 - **Output:** Assembled contigs in FASTA format (e.g., spades_output/contigs.fasta).
