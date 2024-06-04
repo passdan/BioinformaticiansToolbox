@@ -226,7 +226,7 @@ singularity exec ~/Shared_folder/singularities/krona_2.7.1--e7615f7.sif \
 ```
 Open the html and explore the data:
 
-![krona](images\krona.png)
+![krona](images/krona.png)
 
 ###  4.3. <a name='MetaPhlAn:Taxonomicprofiling'></a>MetaPhlAn: Taxonomic profiling
 MetaPhlAn does a similar task but using a different methodology (using bowtie2 in the background). It is good to cross-check results with Kraken for consistency. Look for unexpected taxa that may indicate contamination or novel findings.
@@ -259,7 +259,7 @@ We can investigate the output file in a spreadsheet to check the abundances, but
 
 This becomes especially useful if we combine multiple samples and generate a cladogram like so:
 
-![clad](images\MetaPhlAn3_tutorial_GraPhlAn_main.png)
+![clad](images/MetaPhlAn3_tutorial_GraPhlAn_main.png)
 
 ###  4.4. <a name='OptionalKrakentaxonomicfiltering'></a>[Optional] Kraken taxonomic filtering
 Now we have classified our reads, we could filter out based on the taxonomic classification, for example removing eukaryotic classified sequences.
