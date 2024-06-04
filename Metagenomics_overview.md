@@ -255,7 +255,7 @@ metaphlan trim_fastq/${sampleID}_trim_R1.fastq.gz,trim_fastq/${sampleID}_trim_R2
     --bowtie2db  /opt/miniconda3/envs/mpa/lib/python3.7/site-packages/metaphlan/metaphlan_databases 
 ```
 
-We can investigate the output file in a spreadsheet to check the abundances, but it can also be graphically processed with graphlan (We won't do this now, but you can [**follow a tutorial here**]([https://github.com/biobakery/biobakery/wiki/metaphlan3#create-a-cladogram-with-graphlan])). 
+We can investigate the output file in a spreadsheet to check the abundances, but it can also be graphically processed with graphlan (We won't do this now, but you can [**follow a tutorial here**](https://github.com/biobakery/biobakery/wiki/metaphlan3#create-a-cladogram-with-graphlan)). 
 
 This becomes especially useful if we combine multiple samples and generate a cladogram like so:
 
@@ -266,7 +266,9 @@ Now we have classified our reads, we could filter out based on the taxonomic cla
 
 Here we use the extract_kraken_reads from KrakenTools.
 
-Note: taxID 2759 relates to eukaryotes, and --include-children means every taxID in that umbrella.
+Note: --include-children means every taxID in that umbrella.
+- taxID 2759 relates to Eukaryotes
+- taxID 2157 relates to Archaea
 
 **Time:** 
 - 1% data: 3 minutes
@@ -310,7 +312,7 @@ singularity exec ~/Shared_folder/singularities/spades_latest.sif \
         -1 trim_fastq/${sampleID}_tf_R1.fastq \
         -2 trim_fastq/${sampleID}_tf_R2.fastq \
         -o spades/${sampleID} \
-        -t 4
+        -t 8
 ```
 
 ##  6. <a name='Assessingtheassembly'></a>Assessing the assembly
