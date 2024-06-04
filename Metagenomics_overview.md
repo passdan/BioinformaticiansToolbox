@@ -220,7 +220,9 @@ We can look at the kraken report that is made, but also we can use a program nam
 ```
 # Krona: Visualization of taxonomic classification
 mkdir krona
-ktImportTaxonomy krakendir/${sampleID}-kraken2_report -o krona/${sampleID}-krona.html
+singularity exec ~/Shared_folder/singularities/krona_2.7.1--e7615f7.sif \
+    ktImportTaxonomy krakendir/${sampleID}-kraken2_report \
+     -o krona/${sampleID}-krona.html
 ```
 Open the html and explore the data:
 
@@ -250,11 +252,10 @@ metaphlan trim_fastq/${sampleID}_trim_R1.fastq.gz,trim_fastq/${sampleID}_trim_R2
     --bowtie2out metaphlan/${sampleID}-metaphlan.bz2  \
     --nproc 4    \
     -o metaphlan/${sampleID}-metaphlan_profile.txt \
-    --bowtie2db  /opt/miniconda3/envs/mpa/lib/python3.7/site-packages/metaphlan/metaphlan_databases \
-    --no_map
+    --bowtie2db  /opt/miniconda3/envs/mpa/lib/python3.7/site-packages/metaphlan/metaphlan_databases 
 ```
 
-We can investigate the output file in a spreadsheet to check the abundances, but it can also be graphically processed with graphlan ([We won't do this now, but you can **follow a tutorial here**]([https://github.com/biobakery/biobakery/wiki/metaphlan3#create-a-cladogram-with-graphlan])). 
+We can investigate the output file in a spreadsheet to check the abundances, but it can also be graphically processed with graphlan (We won't do this now, but you can [**follow a tutorial here**]([https://github.com/biobakery/biobakery/wiki/metaphlan3#create-a-cladogram-with-graphlan])). 
 
 This becomes especially useful if we combine multiple samples and generate a cladogram like so:
 
