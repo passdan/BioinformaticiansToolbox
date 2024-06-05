@@ -475,8 +475,13 @@ done
 Now, lets look at out genome in a genomve viewer. First we need to create an index:
 
 ```
-for i in *fa; do singularity exec ~/Shared_folder/singularities/samtools_latest.sif samtools faidx $i; don
+for i in *fa; do singularity exec ~/Shared_folder/singularities/samtools_latest.sif samtools faidx $i; done
 ```
+
+Download three files:
+- .fa
+- .fai
+- .gff
 
 And lets load it up in IGV (Integrated Genome Viewer)
 https://igv.org/app/
