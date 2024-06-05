@@ -508,7 +508,7 @@ There are a huge number of methods for this, with many specifically for a single
    - Functional annotation of sequences using the eggNOG database of orthologous groups.
 
 7. **[Phantom (Pathway and Genome Database Annotation and Metabolic Modeling)](https://github.com/dkoslicki/Phantom)**
-   - A tool for annotating metabolic pathways and genome databases for functional analysis (I haven'y used this one before, but may be worth trying!)
+   - A tool for annotating metabolic pathways and genome databases for functional analysis (I haven't used this one before, but may be worth trying!)
 
 
 **Programs:** Prodigal, HUMAnN2, AMR++
@@ -530,8 +530,8 @@ mkdir functional
 singularity exec \
     --bind /home/Shared_folder/Metagenomics/REF_genomes/chocophlan/uniref \
     ~/Shared_folder/singularities/humann_latest.sif \
-        humann --input trim_fastq/SRR10512950_1pc_trim_R1.fastq.gz \
-        --output test \
+        humann --input trim_fastq/${sampleID}_trim_R1.fastq.gz \
+        --output functional/${sampleID} \
         --threads 6 \
         --protein-database /home/Shared_folder/Metagenomics/REF_genomes/chocophlan/uniref \
         --bypass-nucleotide-search
@@ -565,6 +565,8 @@ It can be complex to set up, but incredibly useful and time saving if you put in
 ###  10.2. <a name='AMR:Antimicrobialresistancegenedetection'></a>AMR++: Antimicrobial resistance gene detection
 AMR++ isn't just one tool, but a whole nextflow pipeline that does a lot of the steps above. However it uses the really powerful MegaRES database for identifing and quantifying AMR genes present, so we can jump straight to that stage in our process. High abundance of AMR genes may suggest significant resistance potential in the microbial community.
 
+**Program:** [AMR++](https://github.com/Microbial-Ecology-Group/AMRplusplus)
+
 - **Input:** Non-host reads in FASTQ format (e.g., non_host_reads.fastq.gz).
 
 - **Output:** AMR gene detection report (e.g., amr_output/report.txt).
@@ -575,7 +577,10 @@ AMR++ isn't just one tool, but a whole nextflow pipeline that does a lot of the 
 
 ```
 # AMR++: Antimicrobial resistance gene detection
- amrplusplus_pipeline.sh -i non_host_reads.fastq.gz -o amr_output/
+nextflow run main_AMR++.nf \
+    -profile singularity \
+    --pipeline resistome \
+    --reads "trim_fastq/*_R{1,2}.fastq.gz" 
 ```
 
 ##  11. <a name='Session:PublicDatabasesandResources'></a>Session: Public Databases and Resources
