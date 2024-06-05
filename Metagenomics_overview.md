@@ -57,6 +57,15 @@ Here we'll do the steps ourselves and see what our findings are, and whether the
 
 In this workshop we will process and analyse these samples, and then afterwards I recomend you try processing the full 30 samples to get further practice!
 
+Note: The main stages of this workshop is working with 1% of each fastq file from the raw data. This was generated with the seqtk package and this command:
+
+```
+for file in fastq/*.fastq.gz
+do
+    seqtk sample $file 0.01 >${file}-1pc.fastq.gz
+done
+```
+
 The commands that are listed below are to work with just one sample at a time. To process multiple samples together we can use the looping methods described in [Looping in Linux](Looping_in_linux.md), but for now pick one sample to complete the process for.
 
 In the following examples I have used ${sampleID} in place of the name of the file. You could replace each individually, or assign it at the beginning of the session:
