@@ -160,14 +160,15 @@ Note: It's important to check the number of reads before and after host removal 
 ```
 # Host removal With Bowtie2
 # First we have to build an index from the host genome
-bowtie2-build host_genome.fa genome_index
+bowtie2-build --threads host_genome.fa genome_index
 
 # Now we can map our data against it
 bowtie2 -x genome_index \
-    -1 ${sampleID}_trim_R1.fastq.gz \
-    -2 ${sampleID}_trim_R2.fastq.gz \
-    --un-conc-gz fastq/${sampleID}-clean.fastq.gz \
-    -S fastq/${sampleID}-aligned.sam
+    --threads 4 \
+    -1 trim_fastq/${sampleID}_trim_R1.fastq.gz \
+    -2 trim_fastq/${sampleID}_trim_R2.fastq.gz \
+    --un-conc-gz trim_fastq/${sampleID}-clean.fastq.gz \
+    -S trim_fastq/${sampleID}-aligned.sam
 ```
 
 ##  4. <a name='Session:TaxonomicProfiling'></a>Session: Taxonomic Profiling
@@ -328,30 +329,74 @@ Load one of the assembly files and select `Depth range` for the scope before pre
 ![Bandage](images/Bandage-assembly-graph.png)
 If you wanted, you can take the sequence and blast it to get an identity here, but we have some more steps to complete our assembly first!
 
+There are a lot of complex decisions to make when building and interpretting these graphs. Here is [**an in-depth review**](https://tylerbarnum.com/2018/02/26/how-to-use-assembly-graphs-with-metagenomic-datasets/) that you may like to read.
+
 
 ##  7. <a name='Session:BinningReconstruction'></a>Session: Binning & Reconstruction
-So far we have all of our assembled metagenomes/MAGs in one file together. That gives an overview of the whole community, but we also want to identify which contigs are from the same organism so that we can know which pathways originate together. Here we can use binning to predict which contigs are linked
+So far we have all of our assembled metagenomes/MAGs in one file together. That gives an overview of the whole community, but we also want to identify which contigs are from the same organism so that we can know which pathways originate together. 
 
-**Programs:** MaxBin, CONCOCT
+There's a large number of programs that can do this function, so it can be useful to test multiple.
 
-###  7.1. <a name='MaxBin:Binningofmetagenomiccontigs'></a>MaxBin: Binning of metagenomic contigs
+**Programs:** Metabat2, MaxBin2, CONCOCT
+
+| Feature                        | MetaBAT2                                       | MaxBin2                                      | CONCOCT                                      |
+|--------------------------------|------------------------------------------------|---------------------------------------------|---------------------------------------------|
+| **Algorithm Basis**            | Probabilistic distances based on composition and coverage | Sequence composition and read depth        | Gaussian Mixture Models on composition and coverage across multiple samples |
+| **Speed**                      | Fast                                           | Moderate                                    | Slow                                        |
+| **Accuracy**                   | High                                           | High                                        | High                                        |
+| **Ease of Use**                | Easy                                           | Moderate                                    | Complex                                     |
+| **Scalability**                | Good, but can struggle with extremely large datasets | Good                                       | Moderate, resource-intensive                |
+| **Multisample Support**        | No                                             | Limited                                     | Yes                                         |
+| **Dependency on Marker Genes** | No                                             | Yes                                         | No                                          |
 
 
-- **Input:** Assembled contigs in FASTA format (e.g., contigs.fasta), abundance file (e.g., abundance_file.txt).
+###  7.1. <a name='metabat2:Binningofmetagenomiccontigs'></a>Metabat2: Binning of metagenomic contigs
 
-- **Output:** Binned contigs in separate FASTA files (e.g., maxbin_output/bin.001.fasta).
+
+- **Input:** Assembled contigs in FASTA format (e.g., contigs.fasta), abundance file from bowtie2 mapping to contigs (e.g., abundance_file.txt).
+
+- **Output:** Binned contigs in separate FASTA files (e.g., metabat2/bin.001.fasta).
+
+**Time:**
+- 1% data: 5 minutes - but can fail because not enough data to be binned
+- 10% data: 30 minutes
 
 ```
-# MaxBin: Binning of metagenomic contigs
+# Binning contigs into MAGs
 mkdir binned
-run_MaxBin.pl -contig spades/${sampleID}/contigs.fasta \
-    -out binned/${sampleID}/ \
-    -reads trim_fastq/${sampleID}_tf_R1.fastq \
-    -reads2 trim_fastq/${sampleID}_tf_R2.fastq
+
+# Map the reads back to the assembly to generate BAM files
+# Build the Bowtie2 index - longest step
+bowtie2-build --threads 4 \
+    spades/${sampleID}/contigs.fasta spades/${sampleID}/contigs
+
+# Align the reads to the assembly
+bowtie2 --threads 4 \
+    -x spades/${sampleID}/contigs \
+    -1 trim_fastq/${sampleID}_tf_R1.fastq \
+    -2 trim_fastq/${sampleID}_tf_R2.fastq \
+    -S spades/${sampleID}_alignment.sam
+
+# Convert SAM to BAM, sort, index
+singularity exec ~/Shared_folder/singularities/samtools_latest.sif samtools view -Sb spades/${sampleID}_alignment.sam > spades/${sampleID}_alignment.bam
+singularity exec ~/Shared_folder/singularities/samtools_latest.sif samtools sort spades/${sampleID}_alignment.bam -o spades/${sampleID}_sorted_alignment.bam
+singularity exec ~/Shared_folder/singularities/samtools_latest.sif samtools index spades/${sampleID}_sorted_alignment.bam
+
+# Generate the depth file
+singularity exec ~/Shared_folder/singularities/metabat_latest.sif  \
+    jgi_summarize_bam_contig_depths \
+    --outputDepth spades/${sampleID}-depth.txt \
+    spades/${sampleID}_sorted_alignment.bam
+
+# Run MetaBAT2 for binning
+singularity exec ~/Shared_folder/singularities/metabat_latest.sif \
+     metabat2 -i spades/${sampleID}/contigs.fasta \
+        -a spades/${sampleID}-depth.txt \
+        -o binned/${sampleID}-MAG
 ```
+Now we have a MAG for each genome in our metagenome assembly. In theory that could be one complete genome, but more likely it can contain many contigs. Lets assess it!
 
-
-##  8. <a name='Session:MAGAssemblyAssessment'></a>Session: MAG Assembly Assessment
+##  8. <a name='Session:MAGAssemblyAssessment'></a>Session: MAG Assembly Assessment - Single Genomes
 Now we need to evaluate the assembly for each sample. Compare the contig statistics across samples to work out if assembly went well and identify variability between samples in assembly quality, and then we can look to see whether the MAGs have the expected genes in their assemblies
 
 **Programs:** QUAST, BUSCO
@@ -365,11 +410,14 @@ Higher N50 and fewer misassemblies indicate better assembly quality.
 
 - **Output:** Quality assessment report in HTML format (e.g., quast_report.html).
 
+**Time:**
+Instant
+
 ```
 # QUAST: Assembly quality assessment
-singularity exec docker://reslp/quast:5.0.2 \
-    quast.py spades/${sampleID}/contigs.fasta \
-        -o spades/${sampleID}-quast_report/
+singularity exec ~/Shared_folder/singularities/quast_5.0.2.sif \
+    quast.py binned/*.fa \
+        -o binned/${sampleID}-quast_report/
 ```
 
 ###  8.2. <a name='BUSCO:Genomecompletenessassessment'></a>BUSCO: Genome completeness assessment
@@ -379,35 +427,76 @@ Check the percentage of complete, single-copy gene orthologs. High completeness 
 
 - **Output:** Completeness report (e.g., busco_output/short_summary.txt).
 
+Time:
+- Per Genome: 1 minute 
+
 ```
 # BUSCO: Genome completeness assessment
-singularity exec docker://ezlabgva/busco:v5.3.2_cv1 \
-    busco --in spades/${sampleID}/contigs.fasta  \
-          --out spades/${sampleID}-busco_report/ \
-          -l bacteria_odb10 \
-          --mode genome \
-          -c 4 -f 
+for genome in binned/*.fa; 
+do 
+    singularity exec ~/Shared_folder/singularities/busco_v5.7.1_cv1.sif     busco \
+    --in $genome \
+    --out ${genome}-busco_report/ \
+    -l bacteria_odb10 \
+    --mode genome \
+    -c 4 -f
+done
 ```
 
-
-##  9. <a name='Session:FunctionalAnnotation'></a>Session: Functional Annotation
-We now have genomes, partial genomes, or MAGs. But right now they are only DNA sequences with no associated information. We next need to perform some gene predictions on our contigs to find out their functional capacities and have annotated genomes for our downstream assessment.
-
-**Programs:** Prodigal, Prokka, HUMAnN2, AMR++
-
-###  9.1. <a name='Prokka:Genomeannotation'></a>Prokka: Genome annotation
+###  8.3. <a name='Prokka:Genomeannotation'></a>Prokka: Single Genome annotation
 Prokka is really the most powerful and well-used bacterial genome annotation tool. It will predict genes, RNAs, annotate the genome and Check the annotation completeness and accuracy. And it's really easy to use!
 
 - **Input:** Assembled contigs in FASTA format (e.g., contigs.fasta).
 
-- **Output:** Annotated genome files (e.g., prokka_output/sample.gff, sample.faa).
+- **Output:** Annotated genome files (e.g., prokka_output/sample.gff).
 
+**Time:**
+- Per Genome - 5 minutes
 ```
 # Prokka: Genome annotation
-prokka ${sampleID}-spades/contigs.fasta \
-    --outdir ${sampleID}-prokka \
-    --prefix ${sampleID}
+for genome in binned/*.fa; 
+do 
+singularity exec ~/Shared_folder/singularities/prokka.sif \
+    prokka ${genome} \
+    --outdir ${genome}-prokka \
+    --prefix ${sampleID}-
+done
 ```
+Now, lets look at out genome in a genomve viewer. First we need to create an index:
+
+```
+for i in *fa; do singularity exec ~/Shared_folder/singularities/samtools_latest.sif samtools faidx $i; don
+```
+
+And lets load it up in IGV (Integrated Genome Viewer)
+https://igv.org/app/
+
+
+##  9. <a name='Session:FunctionalAnnotation'></a>Session: Whole metagenome Functional Annotation
+We now have genomes, partial genomes, or MAGs. But right now they are only DNA sequences with no associated information. We next need to perform some gene predictions on our contigs to find out their functional capacities and have annotated genomes for our downstream assessment.
+
+There are a huge number of methods for this, with many specifically for a single purpose:
+
+1. **[HUMAnN (HMP Unified Metabolic Analysis Network)](https://github.com/biobakery/humann)**
+   - Functional profiling of microbial communities to determine the presence, abundance, and coverage of microbial pathways.
+
+2. **[MetaCyc](https://metacyc.org/)**
+   - A comprehensive database of metabolic pathways and enzymes from all domains.
+
+4. **[MG-RAST (Metagenomics Rapid Annotation using Subsystem Technology)](https://www.mg-rast.org/)**
+   - Web tool for the analysis and annotation of metagenomes.
+
+5. **[MEGAN (MEtaGenome ANalyzer)](https://ab.inf.uni-tuebingen.de/software/megan6/)**
+   - Software for analyzing metagenomic datasets and visualizing taxonomic and functional classifications (I don't like this one really, but it is common).
+
+6. **[eggNOG-mapper](http://eggnog-mapper.embl.de/)**
+   - Functional annotation of sequences using the eggNOG database of orthologous groups.
+
+7. **[Phantom (Pathway and Genome Database Annotation and Metabolic Modeling)](https://github.com/dkoslicki/Phantom)**
+   - A tool for annotating metabolic pathways and genome databases for functional analysis (I haven'y used this one before, but may be worth trying!)
+
+
+**Programs:** Prodigal, HUMAnN2, AMR++
 
 ###  9.2. <a name='HUMAnN2:Functionalprofiling'></a>HUMAnN2: Functional profiling
 Here we can test the abundance and coverage of metabolic pathways and gene families. High abundance pathways may indicate dominant metabolic capabilities of the community.
@@ -416,21 +505,21 @@ Here we can test the abundance and coverage of metabolic pathways and gene famil
 
 - **Output:** Functional profile tables (e.g., humann2_output/pathabundance.tsv, pathcoverage.tsv).
 
+**Time:**:
+- 1% data: 10 minutes (using small protein db)
+- 10% data: - minutes (using small protein db)
+
 ```
 # HUMAnN2: Functional profiling
-humann2 --input non_host_reads.fastq.gz --output humann2_output/
-```
-
-###  9.3. <a name='AMR:Antimicrobialresistancegenedetection'></a>AMR++: Antimicrobial resistance gene detection
-AMR++ isn't just one tool, but a whole nextflow pipeline that does a lot of the steps above. However it uses the really powerful MegaRES database for identifing and quantifying AMR genes present, so we can jump straight to that stage in our process. High abundance of AMR genes may suggest significant resistance potential in the microbial community.
-
-- **Input:** Non-host reads in FASTQ format (e.g., non_host_reads.fastq.gz).
-
-- **Output:** AMR gene detection report (e.g., amr_output/report.txt).
-
-```
-# AMR++: Antimicrobial resistance gene detection
-[THIS IS WRONG COMMAND] amrplusplus_pipeline.sh -i non_host_reads.fastq.gz -o amr_output/
+mkdir functional
+singularity exec \
+    --bind /home/Shared_folder/Metagenomics/REF_genomes/chocophlan/uniref \
+    ~/Shared_folder/singularities/humann_latest.sif \
+        humann --input trim_fastq/SRR10512950_1pc_trim_R1.fastq.gz \
+        --output test \
+        --threads 6 \
+        --protein-database /home/Shared_folder/Metagenomics/REF_genomes/chocophlan/uniref \
+        --bypass-nucleotide-search
 ```
 
 
@@ -440,13 +529,38 @@ Everything we have done so far has been step-by-step through some of the essenti
 It can be complex to set up, but incredibly useful and time saving if you put in the effort to learn the systems.
 
 **Programs:** [nf-core/mag](https://nf-co.re/mag/3.0.0)
+
+### 10.1 MAG nf.core pipeline
+
 - **Input:** Raw sequencing reads, configuration files for the pipeline.
 
 - **Output:** Comprehensive set of results including assembled contigs, binned genomes, and annotations.
 
+**Time:**
+- install: one hour
+- running: ~12h per sample
+
 ```
 # Nextflow: Running nf-core/mag pipeline
-nextflow run nf-core/mag -profile test,docker
+## DONT YOU RUN THIS NOW!!
+# nextflow run nf-core/mag -profile test,singularity --outdir mag-tester
+```
+
+
+###  10.2. <a name='AMR:Antimicrobialresistancegenedetection'></a>AMR++: Antimicrobial resistance gene detection
+AMR++ isn't just one tool, but a whole nextflow pipeline that does a lot of the steps above. However it uses the really powerful MegaRES database for identifing and quantifying AMR genes present, so we can jump straight to that stage in our process. High abundance of AMR genes may suggest significant resistance potential in the microbial community.
+
+- **Input:** Non-host reads in FASTQ format (e.g., non_host_reads.fastq.gz).
+
+- **Output:** AMR gene detection report (e.g., amr_output/report.txt).
+
+**Time:**
+- install: 30 minutes
+- per metagenome: 1-12h 
+
+```
+# AMR++: Antimicrobial resistance gene detection
+ amrplusplus_pipeline.sh -i non_host_reads.fastq.gz -o amr_output/
 ```
 
 ##  11. <a name='Session:PublicDatabasesandResources'></a>Session: Public Databases and Resources
