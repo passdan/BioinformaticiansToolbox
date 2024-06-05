@@ -387,11 +387,21 @@ singularity exec ~/Shared_folder/singularities/metabat_latest.sif  \
     jgi_summarize_bam_contig_depths \
     --outputDepth spades/${sampleID}-depth.txt \
     spades/${sampleID}_sorted_alignment.bam
+```
+Now we are ready to do the binning process.
 
+If you want to jump straight to the binning process then you can copy the files:
+```
+cp ~/Shared_folder/Metagenomics/Assemblies/SRR10512950/contigs.fasta .
+cp ~/Shared_folder/Metagenomics/Assemblies/SRR10512950/SRR10512950-depth.txt .
+```
+Now run!
+```
 # Run MetaBAT2 for binning
+mkdir binned
 singularity exec ~/Shared_folder/singularities/metabat_latest.sif \
-     metabat2 -i spades/${sampleID}/contigs.fasta \
-        -a spades/${sampleID}-depth.txt \
+     metabat2 -i contigs.fasta \
+        -a ${sampleID}-depth.txt \
         -o binned/${sampleID}-MAG
 ```
 Now we have a MAG for each genome in our metagenome assembly. In theory that could be one complete genome, but more likely it can contain many contigs. Lets assess it!
