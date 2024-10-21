@@ -1,17 +1,34 @@
 ## Introduction to Linux
 
 ### Contents
+- [Introduction to Linux](#introduction-to-linux)
+  - [Contents](#contents)
 - [General Reminders!](#general-reminders)
+  - [When connecting to the server:](#when-connecting-to-the-server)
 - [Anatomy of a Command](#anatomy-of-a-command)
+  - [EXERCISES](#exercises)
 - [Learning about Linux commands](#learning-about-linux-commands)
+  - [EXERCISES](#exercises-1)
 - [Changing Directories](#changing-directories)
+  - [EXERCISES](#exercises-2)
 - [Moving and copying data](#moving-and-copying-data)
+  - [EXERCISES](#exercises-3)
 - [Listing files in a directory](#listing-files-in-a-directory)
+  - [Glob!](#glob)
+  - [EXERCISES](#exercises-4)
 - [Visualising Text Files](#visualising-text-files)
+  - [EXERCISES](#exercises-5)
 - [Editing files](#editing-files)
+  - [EXERCISES](#exercises-6)
+  - [\[EXTENSION\]](#extension)
 - [Running and Reusing Scripts](#running-and-reusing-scripts)
+  - [Example process when writing and running a programme](#example-process-when-writing-and-running-a-programme)
+  - [EXERCISES](#exercises-7)
+  - [\[EXTENSION\]](#extension-1)
 - [Querying files with Grep](#querying-files-with-grep)
-- [Reminders & Tips](#tips)
+  - [EXERCISES](#exercises-8)
+- [That's it!](#thats-it)
+  - [Tips](#tips)
 
 ## General Reminders!
 There is a lot of information in this booklet that is to help you with linux in general. Not every command applies right now and some are examples. You should only do the steps that follow the **EXERCISES** header, not every bit of code!
@@ -52,9 +69,9 @@ If there are multiple options with the same beginning then pressing tab twice wi
 
 ### EXERCISES
 1. Use the ```ls``` command to see what files and folders are in your home directory
-2. Use the ```-l``` flag with ```ls``` to see the full information. What type of object is ‘Shared_folder’ ?
-3. Use ```ls``` on ‘Shared_folder’ to see what is inside the folder, and also explore the different sub-folders (use the ```/``` character between directories)
-4. Use ```ls -lh``` on the file ```~/Shared_folder/Day1/subsample_Ill4.fasta``` but DON'T type out all the names. Using the tab key you should only need to press about 4 or 5 letters!
+2. Use the ```-l``` flag with ```ls``` to see the full information. What type of object is ‘Share’ ?
+3. Use ```ls``` on ‘Share’ to see what is inside the folder, and also explore the different sub-folders (use the ```/``` character between directories)
+4. Use ```ls -lh``` on the file ```~/Share/Day1/subsample_Ill4.fasta``` but DON'T type out all the names. Using the tab key you should only need to press about 4 or 5 letters!
 
 ## Learning about Linux commands
 Most Linux commands have a manual page that provides information about the command and options that can alter its behaviour.  Linux manual pages are referred to as man pages. 
@@ -149,7 +166,7 @@ $ mv RNAseq_1.fastq LRubellus_1.fastq
 
 To copy, use the cp command. You could copy a file from another directory to “here” like so, remembering that a full-stop means “the folder I’m currently in”:
 ```
-$ cp /home/Shared_folder/Day1/RNAseq_1.fastq  .
+$ cp /home/Share/Day1/RNAseq_1.fastq  .
 ```
 Often you’ll want to copy a whole folder (directory), and you will need the -r parameter for “recursive”.
 ```
@@ -173,7 +190,7 @@ $ rsync ubuntu@123.456.789:~/RNAseq_1.fastq .
  $ pwd
  /home/user66/
  $ cd LinuxExercises
- $ cp -r ~/Shared_folder/Day1 .
+ $ cp -r ~/Share/Day1 .
  ```
 </details>
 
