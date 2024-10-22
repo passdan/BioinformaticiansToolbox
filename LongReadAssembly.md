@@ -24,7 +24,7 @@ The process and steps below are mostly identical for Nanopore or Pac Bio data an
 
 ## Data
 
-A set of paired genomic illumina data and corresponding PacBio data for the E. Coli is in the ```~/Shared_folder/Day3/longRead``` folder.
+A set of paired genomic illumina data and corresponding PacBio data for the E. Coli is in the ```~/Share/Day3/longRead``` folder.
 
 Illumina Data
 ```
@@ -34,12 +34,6 @@ ERR022075_2.fastq.gz (~35m)
 Pac Bio Reads 
 ```
 ERR022075_PacBio.fastq -  Raw Pac Bio data (~50k)
-```
-
-We will be using a docker container from dockerhub named:
-```
-chrishah/fmlrc-wtdbg2-plus:v062022
-chrishah/flye:2.9-b1778
 ```
 
 ## Assembly
@@ -278,15 +272,15 @@ staphb/flye:latest
 reslp/quast:5.0.2
 ezlabgva/busco:v5.3.2_cv1
 ```
-Note: All steps have been completed and are available in ```~/Shared_folder/Day3/longReads/Assemblies``` if you would prefer to look at the outputs rather than process the data. Step one (short read only spades assembly) specifically has been completed for you as it require huge resources.
+Note: All steps have been completed and are available in ```~/Share/Day3/longReads/Assemblies``` if you would prefer to look at the outputs rather than process the data. Step one (short read only spades assembly) specifically has been completed for you as it require large resources.
 
 ### Assembly Exercises:
 Estimated times are using 4 CPUs: 
-1. [__Skip this for now, and do the long read assemblies!__] Using spades, assemble the 1% illumina short reads on their own and evaluate the resulting assembly (~15 minutes) 
-2. Using wtdbg2 (~5 minutes) or flye  (~20 minutes), assemble the raw PacBio data alone
+1. [__Skip this step and do the long read assemblies! - If in our course you will have performed it during the short read assembly session__] Using spades, assemble the illumina short reads on their own and evaluate the resulting assembly (~15 minutes) 
+2. Using wtdbg2 (~5 minutes) or flye  (~15 minutes), assemble the raw PacBio data alone
 3. Use FMLRC2 (~2 minutes when using the pre-generated index) to correct the PacBio dataset with the Illumina short reads 
 4. Use wtdbg2  (~5 minutes) or flye (~20 minutes) again to assemble the now high-quality long reads
-5. [Optional] Use spades in hybrid mode to include illumina and corrected PacBio reads together (~20 minutes)
+5. [Optional] Use spades in hybrid mode to automatically include illumina and corrected PacBio reads together (~20 minutes)
 
 ### Evaluating Assembly Exercises
 
