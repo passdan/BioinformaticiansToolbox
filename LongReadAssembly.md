@@ -135,9 +135,9 @@ Given a BWT of the short-read sequencing data, FMLRC will build an FM-index and 
 Note: there is a FMLRC2 version now available that works exactly the same but runs in half the time. However this is written in the rust language which is not universally available.
 
 #### Prepare the data
-We need to create an index of the short reads prior to correcting. It’s a complex command with some conversions in there, but the fundamentals are running ropebwt2 and fmlrc-convert. I don’t understand why this isn’t an automated step! 
+We need to create an index of the short reads prior to correcting. It’s a complex command with some conversions in there, but the fundamentals are running ropebwt2 before fmlrc-convert 
 
-__I’ve done this step as it is very memory intensive and to save time__
+__I’ve done this step as it is memory intensive and to save time__
 
 ```
 $ mkdir temp
@@ -265,7 +265,7 @@ singularity exec docker://maintainer/containerName:version
 ```
 Optional docker containers for different program running:
 ```
-reslp/spades:3.15.3
+staphb/spades:4.0.0
 passdan/fmlrc2:latest
 staphb/wtdbg2:2.5
 staphb/flye:latest
@@ -276,10 +276,10 @@ Note: All steps have been completed and are available in ```~/Share/Day3/longRea
 
 ### Assembly Exercises:
 Estimated times are using 4 CPUs: 
-1. [__Skip this step and do the long read assemblies! - If in our course you will have performed it during the short read assembly session__] Using spades, assemble the illumina short reads on their own and evaluate the resulting assembly (~15 minutes) 
-2. Using wtdbg2 (~5 minutes) or flye  (~15 minutes), assemble the raw PacBio data alone
-3. Use FMLRC2 (~2 minutes when using the pre-generated index) to correct the PacBio dataset with the Illumina short reads 
-4. Use wtdbg2  (~5 minutes) or flye (~20 minutes) again to assemble the now high-quality long reads
+1. [__Skip this step and do the long read assemblies! - If in our course you will have already performed it during the short read assembly session__] Using spades and --only-assembler, assemble the illumina short reads on their own and evaluate the resulting assembly (~5 minutes) 
+2. Using wtdbg2 (~5 minutes) or flye  (~30 minutes), assemble the raw PacBio data alone
+3. Use FMLRC2 (~2 minutes when using the pre-generated index) to correct the PacBio dataset with the Illumina short reads
+4. Use wtdbg2  (~5 minutes) or flye (~25 minutes) again to assemble the now error-corrected long reads
 5. [Optional] Use spades in hybrid mode to automatically include illumina and corrected PacBio reads together (~20 minutes)
 
 ### Evaluating Assembly Exercises
