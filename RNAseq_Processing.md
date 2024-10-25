@@ -14,13 +14,13 @@ This data comes from a paper looking at the chromatin organisation within the Ar
 
 Full data is available here: https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
 
-We will be using  scripts to run these steps. In the ```Shared_folder/Day5``` folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names. 
+We will be using  scripts to run these steps. In the ```Share/Day5``` folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names. 
 
 So far we have used only a small dataset to quickly practice the steps but now we’ll be using full sized RNAseq samples. This is because otherwise it causes the programs to think it’s bad data and causes errors. 
 
-In the ```Shared_folder/Day5/RNAseq-Processing``` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder ```Shared_folder/Day5/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
+In the ```Share/Day5/RNAseq-Processing``` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder ```Share/Day5/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
 ```
-$ ls Shared_folder/Day5/RNAseq-Processing:
+$ ls Share/Day5/RNAseq-Processing:
 1-QC.sh  
 2-star_index_genome.sh  (already done, don’t repeat!)
 3-star.sh  
@@ -28,12 +28,12 @@ $ ls Shared_folder/Day5/RNAseq-Processing:
 5-featurecounts.sh 
 ```
 ```
-$ ls Shared_folder/Day5/RNAseq-Processing/fastqs
+$ ls Share/Day5/RNAseq-Processing/fastqs
 SRR5222797_10pc_1.fastq    SRR5222797_10pc_2.fastq
 SRR5222798_10pc_1.fastq    SRR5222798_10pc_2.fastq
 SRR5222799_10pc_1.fastq    SRR5222799_10pc_2.fastq
 
-$ ls Shared_folder/Day5/REFS
+$ ls Share/Day5/REFS
 Arabidopsis_thaliana.TAIR10.53.gtf
 Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa
 ……… <Lots of other index files for star to function that you don’t need to touch!>
@@ -41,30 +41,25 @@ Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa
 
 ### EXCERCISES
 
-Using the pre-made scripts perform the steps on three pairs of fastq files. There are examples of all of these files in the ```~/Shared_folder/Day5/RNAseq-Processing``` directory which you should copy into your own folder. You may need to edit them to represent your own working folder and filenames
+Using the pre-made scripts perform the steps on three pairs of fastq files. There are examples of all of these files in the ```~/Share/Day5/RNAseq-Processing``` directory which you should copy into your own folder. You may need to edit them to represent your own working folder and filenames
 
 Note: Here, we will use a local version of the singularity image files to avoid downloading uniquely each (alternatively replace with ```docker://passdan/rnaseq-mini```).
 
-0. Copy the folder ```~/Shared_folder/Day5/RNAseq-Processing``` to your local directory and enter it (```cp -r```)
-1. Open and edit with your username the 5 looping scripts to understand what their functions are
-2. QC and trim your sample data (script 1)
-3. Use your trimmed data as inputs to run star (script 3)
-4. Run picard MarkDuplicates to remove identified duplicates in the data (script 4)
-5. Use featureCounts to count abundance of mapped reads to each gene (script 5)
-6. Review the outputs to see what files you have created
+0. Copy the folder ```~/Share/Day5/RNAseq-Processing``` to your local directory and enter it (```cp -r```)
+1. Read and review the 5 looping scripts to understand what their functions are
+2. Perform the processing steps:
+   1. QC and trim your sample data (script 1)
+   2. Use your trimmed data as inputs to run star (script 3)
+   3. Run picard MarkDuplicates to remove identified duplicates in the data (script 4)
+   4. Use featureCounts to count abundance of mapped reads to each gene (script 5)
+3. Review the outputs to see what files you have created!
 
-<details>
-    <summary>
+4. Create a MultiQC report for  the outputs
 
-### Extension: Create a MultiQC report for  the outputs
-
-</summary>
-
-6. Run multiQC on the processed directory using this full command (you don’t need to give any additional parameters):
+You can run multiQC on the processed directory using this full command (you don’t need to give any additional parameters):
 
 ```
-singularity exec docker://multiqc/multiqc:latest multiqc .
+singularity exec --bind `pwd`:`pwd` --pwd `pwd` docker://multiqc/multiqc:latest multiqc .
 ```
-</details>
 	
 These outputs are now ready to put into R and perform Differential Gene Expression Analysis!
