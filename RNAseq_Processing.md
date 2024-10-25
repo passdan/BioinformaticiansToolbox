@@ -29,9 +29,9 @@ $ ls Share/Day5/RNAseq-Processing:
 ```
 ```
 $ ls Share/Day5/RNAseq-Processing/fastqs
-SRR5222797_10pc_1.fastq    SRR5222797_10pc_2.fastq
-SRR5222798_10pc_1.fastq    SRR5222798_10pc_2.fastq
-SRR5222799_10pc_1.fastq    SRR5222799_10pc_2.fastq
+SRR5222797_1.fastq    SRR5222797_2.fastq
+SRR5222798_1.fastq    SRR5222798_2.fastq
+SRR5222799_1.fastq    SRR5222799_2.fastq
 
 $ ls Share/Day5/REFS
 Arabidopsis_thaliana.TAIR10.53.gtf
