@@ -18,12 +18,12 @@ Full data is available here: https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
 QC
 ```
 fastp \
-	--in1 $workingdir/fastq/Sample_1.fastq \
-	--in2 $workingdir/fastq/Sample_2.fastq \
-	--out1 $workingdir/fastq/Sample-trim_1.fastq \
-	--out2 $workingdir/fastq/Sample-trim_2.fastq
+	--in1 fastq/Sample_1.fastq \
+	--in2 fastq/Sample_2.fastq \
+	--out1 fastq/Sample-trim_1.fastq \
+	--out2 fastq/Sample-trim_2.fastq
 
-fastqc -t $threads $workingdir/fastq/SampleA*.fastq
+fastqc -t $threads fastq/SampleA*.fastq
 ```
 Index the reference genome
 ```
@@ -60,15 +60,15 @@ featureCounts \
 	-T $threads -p -F GTF -t exon -g gene_id \
 	-a data/REFS/ReferenceGeneLocations.gtf \
 	-o featureCounts/Sample.featurecount \
-	$workingdir/star/Sample.sorted.bam
+	star/Sample.sorted.bam
 ```
 
 
-We will be using  scripts to run these steps. In the ```Share/Day5``` folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names. 
+We will be using  scripts to run these steps. In the `Share/Day5` folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names.
 
 So far we have used only a small dataset to quickly practice the steps but now we’ll be using full sized RNAseq samples. This is because otherwise it causes the programs to think it’s bad data and causes errors. 
 
-In the ```Share/Day5/RNAseq-Processing``` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder ```Share/Day5/REFS there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
+In the `Share/Day5/RNAseq-Processing` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder `Share/Day5/REFS` there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
 ```
 $ ls Share/Day5/RNAseq-Processing:
 1-QC.sh  
