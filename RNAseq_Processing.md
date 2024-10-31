@@ -14,6 +14,56 @@ This data comes from a paper looking at the chromatin organisation within the Ar
 
 Full data is available here: https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
 
+### Basic Process
+QC
+```
+fastp \
+	--in1 $workingdir/fastq/Sample_1.fastq \
+	--in2 $workingdir/fastq/Sample_2.fastq \
+	--out1 $workingdir/fastq/Sample-trim_1.fastq \
+	--out2 $workingdir/fastq/Sample-trim_2.fastq
+
+fastqc -t $threads $workingdir/fastq/SampleA*.fastq
+```
+Index the reference genome
+```
+STAR 	\
+	--runThreadN 8 \
+	--runMode genomeGenerate \
+	--genomeDir  data/REFS \
+	--genomeFastaFiles ReferenceGenome.fa \
+	--sjdbGTFfile ReferenceGeneLocations.gtf \
+	--sjdbOverhang 49
+```
+Map reads against reference genome
+```
+STAR \
+    --outMultimapperOrder Random \
+    --runThreadN $threads  \
+    --runMode alignReads \
+    --quantMode GeneCounts \
+    --outFileNamePrefix star/Sample. \
+    --genomeDir data/REFS \
+    --readFilesIn fastq/Sample-trim_1.fastq fastq/Sample-trim_2.fastq
+```
+Optional Mark duplicates
+```
+picard MarkDuplicates \
+		I=star/Sample.bam \
+		O=markdup/Sample.rmdup.bam \
+		M=markdup/Sample.metrics.rmdup.txt \
+		REMOVE_DUPLICATES=true 
+```
+Count fetures/genes
+```
+featureCounts \
+	-T $threads -p -F GTF -t exon -g gene_id \
+	-a data/REFS/ReferenceGeneLocations.gtf \
+	-o featureCounts/Sample.featurecount \
+	$workingdir/star/Sample.sorted.bam
+```
+
+
 We will be using  scripts to run these steps. In the ```Share/Day5``` folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names. 
 
 So far we have used only a small dataset to quickly practice the steps but now we’ll be using full sized RNAseq samples. This is because otherwise it causes the programs to think it’s bad data and causes errors. 
