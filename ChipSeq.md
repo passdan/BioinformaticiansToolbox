@@ -4,12 +4,14 @@ Here we'll process through the main stages of a ChIPSeq analysis. I have only in
 
 ### Source Data
 ```
-# Download C. elegans genome
+# Download C. elegans genome - Just using Chr1 in this practical for speed.
+mkdir REFS
+cd REFS
 wget https://ftp.ensembl.org/pub/release-113/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna_rm.chromosome.I.fa.gz
 ```
 
 ### Samples
-Distribution of histone modifications across the genome in C. elegans sperm vs. oocytes vs. early embryos
+Distribution of histone modifications across the genome in C. elegans sperm vs. oocytes vs. early embryos. The files you have been given today are just Chr1, but you can download the full dataset here to run the full analysis yourself later.
 
 BioProject Accession Number: [PRJNA475794](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704)
 ```
@@ -33,8 +35,6 @@ SRR7298009.fastq.gz     GSM3187965      OocyteInput1
 SRR7298010.fastq.gz     GSM3187966      OocyteInput2
 SRR7298011.fastq.gz     GSM3187967      SpermInput1
 SRR7298012.fastq.gz     GSM3187968      SpermInput2
-
-
 ```
 
 
@@ -42,9 +42,11 @@ SRR7298012.fastq.gz     GSM3187968      SpermInput2
 ### Pre-Processing
 QC
 ```
-fastp \
-	--in fastq/Sample1.fastq.gz \
-	--out fastq/Sample1-trim.fastq.gz \
+singularity exec docker://staphb/fastp \
+    fastp \
+	    --in1 fastq/Sample1.fastq.gz \
+	    --out1 fastq/Sample1-trim.fastq.gz \
+        -w 4
 
 fastqc -t $threads fastq/Sample*.fastq.gz
 ```
@@ -57,32 +59,37 @@ Typically either BWA or Bowtie2 is used for standard mapping of reads to the ref
 #### Index genome
 First we need to convert the reference genome into and indexed format. Only need to do this once ever! 
 ```
-bowtie2-build c_elegans.genomic.fa.gz c_elegans_index
+singularity exec docker://staphb/bowtie2 \
+    bowtie2-build c_elegans.genomic.fa.gz c_elegans_index
 ```
 #### Align reads against the reference genome 
+N.b. This is the longest step, takes ~10 mins per sample
 ```
+mkdir aligned
 # One sample
-bowtie2 -x c_elegans_index \
-    -p 4 \
-    -q Sample1-trim.fastq.gz \
-    -S Sample1.sam
+singularity exec docker://staphb/bowtie2 \
+    bowtie2 -x REFS/c_elegans_index \
+        -p 4 \
+        -q fastqs/Sample1-trim.fastq.gz \
+        -S aligned/SRR7297994.sam
 ```
 #### Format the outputs for downstream processing
 ```
-samtools view -bS Sample1-align.sam | samtools sort -o Sample1.bam
-samtools index Sample1.bam
+singularity exec docker://staphb/samtools \
+    samtools view -@4 -bS aligned/SRR7297994.sam | \
+    singularity exec docker://staphb/samtools\
+         samtools sort -@4 -o aligned/SRR7297994.bam
+
+singularity exec docker://staphb/samtools \
+    samtools index aligned/SRR7297994.bam
 ```
 #### Make a visualisation for genome browsers
 ```
-# Generate bedGraph (intermediate format)
-genomecov -ibam Sample1.bam \
-    -g c_elegans.genomic.fa.gz \
-    -bg > Sample1.bedGraph
-
-# Convert bedGraph to bigWig
-bedGraphToBigWig Sample1.bedGraph \
-    c_elegans.genomic.fa.gz \
-    Sample1.bw
+mkdir traces
+singularity exec docker://mgibio/deeptools \
+    bamCoverage -b aligned/SRR7297994.bam \
+    -o traces/SRR7297994.bw \
+    -p 4
 ```
 
 
@@ -106,36 +113,33 @@ for sample in "${samples[@]}"; do
     
     singularity exec docker://staphb/fastp \
         fastp \
-    	    --in fastq/${sample}.fastq.gz \
-	        --out fastq/${sample}-trim.fastq.gz \
+    	    --in fastqs/${sample}.fastq.gz \
+	        --out fastqs/${sample}-trim.fastq.gz \
+            -w ${THREADS}
 
     # Alignment step
     singularity exec docker://staphb/bowtie2 \
         bowtie2 -x "${REFERENCE_INDEX}" \
-            -p "${THREADS}" \
-            -q "${sample}-trim.fastq.gz" \
-            -S "${sample}.sam"
+            -p ${THREADS} \
+            -q ${sample}-trim.fastq.gz \
+            -S ${sample}.sam
     
     # Convert SAM to sorted BAM
     singularity exec docker://staphb/samtools \
-        samtools view -bS "${sample}.sam" | samtools sort -o "${sample}.bam"
+        samtools view -@ ${THREADS} -bS aligned/${sample}.sam | singularity exec docker://staphb/samtools samtools sort -@ ${THREADS} -o aligned/${sample}.bam
+
     singularity exec docker://staphb/samtools \    
-        samtools index "${sample}.bam"
+        samtools index aligned/${sample}.bam
     
     # Generate genome coverage files
-    singularity exec docker://staphb/bedtools \
-        genomecov -ibam "${sample}.bam" \
-            -g "${REFERENCE_GENOME}" \
-            -bg > "${sample}.bedGraph"
-        
-    # Convert bedGraph to bigWig
-    singularity exec docker://staphb/bedtools \
-        bedGraphToBigWig "${sample}.bedGraph" \
-            "${REFERENCE_GENOME}" \
-            "${sample}.bw"
-    
-    # Optional: Clean up intermediate files
-    rm "${sample}.sam" "${sample}.bedGraph"
+    mkdir traces
+    singularity exec docker://mgibio/deeptools \
+        bamCoverage -b aligned/${sample}.bam \
+            -o traces/${sample}.bw \
+            -p 4
+
+    # Optional: Good idea to remove intermediate files
+    rm "${sample}.sam"
 done
 ```
 
@@ -154,6 +158,9 @@ In the browser go to https://igv.org/app/, select _C elegans_ and import the `.b
 Now that we have seen that we have some peaks in our data, lets technically identify them
 
 ### MACS2
+Macs is a really common peak caller and works really well. There are a huge number of parameters to play with so do [**check out their tutorial**](https://macs3-project.github.io/MACS/docs/tutorial.html) for more, especially around peak sizes for TFs vs histone modifications.
+
+Here's an example, code. It's harder to automate this step as you need to choose the pairs of ChIP and inputs that go together, and naming them:
 ```
 GENOME_SIZE="100286401"
 mkdir -p macs2
@@ -167,12 +174,11 @@ singularity exec docker://dceoy/macs2 \
         -n Sample1 \
         --outdir macs2 \
         -q 0.01 \
-        --broad \
-        2> ${OUTPUT_DIR}/logs/macs2_log.txt
+        --broad 
 ```
-Now lets take our annotated peaks and add them to the IGV browser to see agreement (or not)
+Now lets take our identified peaks and add them to the IGV browser to see agreement (or not)
 
-A good practice is to run additional peak calling algorythms and use those in agreement as your default set.
+A good practice is to run additional peak calling algorithms and use those in agreement as your default set.
 
 ### HOMER
 ```
@@ -200,4 +206,4 @@ pos2bed.pl Sample1_histone_peaks.txt > Sample1_peaks.bed
 We can check this in the genome browser too. How well do the two peak calling methods agree?
 
 ## Annotation & Interpretation
-We now have processed our raw data through the essential steps and it is now ready for further downstream analysis. 
+We now have processed our raw data through the essential steps and it is now ready for further downstream analysis.
