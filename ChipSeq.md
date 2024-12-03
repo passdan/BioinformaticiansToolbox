@@ -102,44 +102,54 @@ Of course, we'll usually have many samples to process together. Here is a simple
 samples=("Sample1" "Sample2" "Sample3")
 
 REFERENCE_INDEX="c_elegans_index"
-REFERENCE_GENOME="c_elegans.genomic.fa.gz"
+REFERENCE_GENOME="c_elegans-ChI.fa.gz"
 
 # Number of threads to use
-THREADS=4
+THREADS=6
+
+mkdir -p aligned
+mkdir -p traces
+
+combined_list=($(printf '%s ' "${samples[@]}" "${inputs[@]}"))
 
 # Loop through each sample
-for sample in "${samples[@]}"; do
-    echo "Processing ${sample}"
-    
+for sample in "${combined_list[@]}"; do
+    echo "Running QC - ${sample}"
+
     singularity exec docker://staphb/fastp \
         fastp \
-    	    --in fastqs/${sample}.fastq.gz \
-	        --out fastqs/${sample}-trim.fastq.gz \
+            --in1 fastqs/${sample}.fastq.gz \
+            --out1 fastqs/${sample}-trim.fastq.gz \
             -w ${THREADS}
 
+    echo "Starting Alignment - ${sample}"
     # Alignment step
     singularity exec docker://staphb/bowtie2 \
-        bowtie2 -x "${REFERENCE_INDEX}" \
+        bowtie2 -x REFS/${REFERENCE_INDEX} \
             -p ${THREADS} \
-            -q ${sample}-trim.fastq.gz \
-            -S ${sample}.sam
-    
+            -q fastqs/${sample}-trim.fastq.gz \
+            -S aligned/${sample}.sam
+
+
+    echo "Sort, Convert, Index - ${sample}"
     # Convert SAM to sorted BAM
     singularity exec docker://staphb/samtools \
         samtools view -@ ${THREADS} -bS aligned/${sample}.sam | singularity exec docker://staphb/samtools samtools sort -@ ${THREADS} -o aligned/${sample}.bam
 
-    singularity exec docker://staphb/samtools \    
+    singularity exec docker://staphb/samtools \
         samtools index aligned/${sample}.bam
-    
+
+    echo "Generate bigwig coverage file - ${sample}"
     # Generate genome coverage files
-    mkdir traces
-    singularity exec docker://mgibio/deeptools \
+    singularity exec docker://mgibio/deeptools:3.5.3 \
         bamCoverage -b aligned/${sample}.bam \
             -o traces/${sample}.bw \
-            -p 4
+            -p ${THREADS}
 
     # Optional: Good idea to remove intermediate files
-    rm "${sample}.sam"
+    rm aligned/${sample}.sam
+done
+
 done
 ```
 
