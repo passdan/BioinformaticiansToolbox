@@ -44,8 +44,8 @@ QC
 ```
 singularity exec docker://staphb/fastp \
     fastp \
-	    --in1 fastq/Sample1.fastq.gz \
-	    --out1 fastq/Sample1-trim.fastq.gz \
+	    --in1 fastq/SRR7297994.fastq.gz \
+	    --out1 fastq/SRR7297994-trim.fastq.gz \
         -w 4
 
 fastqc -t $threads fastq/Sample*.fastq.gz
@@ -70,7 +70,7 @@ mkdir aligned
 singularity exec docker://staphb/bowtie2 \
     bowtie2 -x REFS/c_elegans_index \
         -p 4 \
-        -q fastqs/Sample1-trim.fastq.gz \
+        -q fastqs/SRR7297994-trim.fastq.gz \
         -S aligned/SRR7297994.sam
 ```
 #### Format the outputs for downstream processing
