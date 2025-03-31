@@ -23,9 +23,9 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 - Accessing the bioinformatics cloud Image 
 - [Review of Linux basics](Introduction_to_Linux.md)
 - [NGS data and Quality Control - How well did my sequencing run work?](NGS_QualityControl.md)
-- [Linux methods for multiple sample handling](Looping_in_linux.md)
 
 ### Day 2
+- [Linux methods for multiple sample handling](Looping_in_linux.md)
 - Using [Docker](https://github.com/chrishah/docker-intro), [Singularity](Using_Containers.md) (& apptainer) for reproducible bioinformatics
 - [Short-read Genome Assembly](https://github.com/chrishah/short-read-processing-and-assembly)
 
