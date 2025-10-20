@@ -26,7 +26,7 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 
 ### Day 2
 - [Linux methods for multiple sample handling](Looping_in_linux.md)
-- Using [Docker](https://github.com/chrishah/docker-intro), [Singularity](Using_Containers.md) (& apptainer) for reproducible bioinformatics
+- Using [Docker](https://github.com/chrishah/docker-intro) and/or [Singularity/apptainer](Using_Containers.md) for reproducible bioinformatics
 - [Short-read Genome Assembly](https://github.com/chrishah/short-read-processing-and-assembly)
 
 ### Day 3
