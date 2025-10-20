@@ -2,33 +2,18 @@
 
 ### Contents
 - [Introduction to Linux](#introduction-to-linux)
-  - [Contents](#contents)
 - [General Reminders!](#general-reminders)
   - [When connecting to the server:](#when-connecting-to-the-server)
 - [Anatomy of a Command](#anatomy-of-a-command)
-  - [EXERCISES](#exercises)
 - [Learning about Linux commands](#learning-about-linux-commands)
-  - [EXERCISES](#exercises-1)
 - [Changing Directories](#changing-directories)
-  - [EXERCISES](#exercises-2)
 - [Moving and copying data](#moving-and-copying-data)
-  - [EXERCISES](#exercises-3)
 - [Listing files in a directory](#listing-files-in-a-directory)
-  - [Glob!](#glob)
-  - [EXERCISES](#exercises-4)
 - [Visualising Text Files](#visualising-text-files)
-  - [EXERCISES](#exercises-5)
 - [Editing files](#editing-files)
-  - [EXERCISES](#exercises-6)
-  - [\[EXTENSION\]](#extension)
 - [Running and Reusing Scripts](#running-and-reusing-scripts)
-  - [Example process when writing and running a programme](#example-process-when-writing-and-running-a-programme)
-  - [EXERCISES](#exercises-7)
-  - [\[EXTENSION\]](#extension-1)
 - [Querying files with Grep](#querying-files-with-grep)
-  - [EXERCISES](#exercises-8)
-- [That's it!](#thats-it)
-  - [Tips](#tips)
+- [Tips](#tips)
 
 ## General Reminders!
 There is a lot of information in this booklet that is to help you with linux in general. Not every command applies right now and some are examples. You should only do the steps that follow the **EXERCISES** header, not every bit of code!
@@ -419,3 +404,4 @@ As you work through things in linux, here's a few tips of things to check when y
 - You have a “cheatsheet” file that has a list of common commands, which will come in very useful!
 - Never use spaces or characters other than _ or - in file or folder names! 
 - If you are trapped, pressing control and C will often escape from the error. Pressing q closes most manuals or ‘less’ windows, and :wq for vim
+
