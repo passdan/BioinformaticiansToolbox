@@ -37,7 +37,7 @@ You can either open the DESeq2/Sartools script in the RStudio server at today's 
 You can also open it directly on your own computer (not recommended during a workshop as it will take time to install some packages). 
 1. Copy the folder RNAseq-Analysis to your local directory, and then enter it.
 ```
-$ cp -r ~/Share/Dayd/RNAseq-Analysis .
+$ cp -r ~/Share/Day5/RNAseq-Analysis .
 ```
 2. View and edit the Rscript to confirm the file locations and choose your parameters and testing options.
 
@@ -129,5 +129,6 @@ $ grep -f gene_list.txt AvsB.complete.txt >> AvsB.ASD.txt
 ```
 
 You can now use that file for your heatmap generation using the same method as above
+
 
 </details>
