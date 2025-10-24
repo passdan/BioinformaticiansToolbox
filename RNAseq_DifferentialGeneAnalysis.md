@@ -11,7 +11,9 @@ Following these three steps, there are an almost infinite number of tools and pa
 
 ### Differential Gene Expression analysis using Deseq2 & Sartools
 
-We will be using DESeq2 to perform our analysis but for a rapid overview we will use SARTools to automate the core steps and produce a graphical output, but it also creates the deseq objects for further analysis. The full guide to SARTools can be found on the github page PF2-pasteur-fr/SARTools: Statistical Analysis of RNA-Seq Tools.
+We will be using DESeq2 to perform our analysis but it is a massive package with a huge number of options, parameters and steps ([See the full manual here](https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html). 
+
+Today for a rapid overview we will use a R wrapper package named SARTools (Statistical Analysis of RNA-Seq Tools) to automate the core steps and produce a graphical output. It also creates the deseq object for further analysis using standard deseq2 commands too. The full guide to SARTools can be found on the [github page](https://github.com/PF2-pasteur-fr/SARTools).  
 
 I have also provided a ”mapping file” to annotate genes with common names for some easy investigation! This is just a reduced version of the GTF file you originally mapped with. You have been provided with it for today’s data but in the future you can generate it yourself with the following command (changing the “Homo_sapiens.GRCh38.100” part for your species):
 ```
@@ -26,7 +28,7 @@ A set of nine Human neuronal differential RNAseq samples have been sequenced, co
 Deletions and alterations to this region has a range of impacts on neuropsychiatric disorders and is under active study. See the [omim page]( https://www.omim.org/entry/612474) and the [Wikipedia page](https://en.wikipedia.org/wiki/1q21.1_deletion_syndrome) is also remarkably informative! One potential relationship is to Autism Spectrum Disorders (ASD) and looking at the effect deletion/duplication of this region has on related genes can be of interest. A list of genes identified as being symptomatically-related have been put in today’s folder named ASD_list.txt from the [SFARI database](https://gene.sfari.org/database/gene-scoring/)
 
 # Exercises
-The data for this session is in: ```$ ~/Share/Day5/RNAseq-Analysis``` and we will be using scripts found in the R-scripts folder
+The data for this session is in: ```$ ~/Share/Day5/RNAseq-Analysis``` and we will be using scripts found in the R-scripts folder.
 
 When doing the analysis we will generate comparisons between Control, Duplication, and Deletion of the gene region. We also will select from removed or non-removed duplicates. Pick one comparison to focus on for these questions:
 
@@ -132,3 +134,4 @@ You can now use that file for your heatmap generation using the same method as a
 
 
 </details>
+
