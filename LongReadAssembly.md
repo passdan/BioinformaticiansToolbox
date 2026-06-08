@@ -321,6 +321,6 @@ singularity exec docker://staphb/prokka:latest \
         prokka polished_flye_assembly.fasta
 ```
 2. Read the gtf file that was generated. Try using grep to find the 16S gene, or another favourite gene of yours!
-3. Later, we will look at visualising genome annotations!
+3. Load the genome and gtf file into IGV browser (online) or IGB (local install) to visualise the annotation.
 
 </details>

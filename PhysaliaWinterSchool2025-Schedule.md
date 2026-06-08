@@ -1,0 +1,50 @@
+<<<<<<< HEAD:PhysaliaWinterSchool2024-Schedule.md
+# Physalia Winter School in Bioinformatics - 2026
+=======
+# Physalia School in Bioinformatics - 2025
+>>>>>>> a7d9bdd5ea008f554a58c74623787af11c839208:PhysaliaWinterSchool2025-Schedule.md
+## Instructors: Dr Daniel Pass & Dr Christoph Hahn
+
+---
+
+## OVERVIEW
+This course introduces participants to Next Generation Sequencing biology, both understanding the concepts and handling the data. We will cover a broad range of software and analysis from quality assessment of sequencing runs, through assembling and annotating small genomes, RNAseq and differential gene expression, and phylogenetics with NGS data. 
+
+Primarily focussing on the most popular Illumina data, we will also look at the different requirements and opportunities utilising long read data (Nanopore/PacBio). This course will also include use of the linux command line and docker for bioinformatic analysis as modern standard approaches.
+ 
+## FORMAT
+The course is structured in modules over five days with each session including an introductory lecture, class discussion of key concepts, and practical hands-on sessions.
+
+We also provide short self-study preparation materials on basic linux usage if you have not worked in linux before, to have a foundation to aid you in the course.
+
+Live sessions involve both mirroring exercises with the instructor to demonstrate a skill as well as applying these skills on your own to complete individual exercises. After and during each exercise, interpretation of results will be discussed as a group.
+
+## Schedule
+ 
+**Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course. If you're not on a course and some steps don't make sense you may want to go sign up for a course! Get in touch!
+
+### Day 1
+- Accessing the bioinformatics cloud image (ppt) 
+- [Review of Linux basics](Introduction_to_Linux.md)
+- [NGS data and Quality Control - How well did my sequencing run work?](NGS_QualityControl.md)
+
+### Day 2
+- [Linux methods for multiple sample handling](Looping_in_linux.md)
+- Using [Docker](https://github.com/chrishah/docker-intro) and/or [Singularity/apptainer](Using_Containers.md) for reproducible bioinformatics
+- [Short-read Genome Assembly](https://github.com/chrishah/short-read-processing-and-assembly)
+
+### Day 3
+- [Genome Annotation and visualisation](https://github.com/chrishah/post-assembly-intro)
+- [Assembly with long read data - Nanopore/PacBio & hybrid assemblies](LongReadAssembly.md)
+
+### Day 4
+- [Phylogenetics and Phylogenomics](https://github.com/chrishah/phylogenomics_intro_vertebrata)
+- Bioinformatic analysis with pipelines
+  - [Snakemake](https://github.com/chrishah/phylogenomics_intro_vertebrata)
+  - [Nextflow](A_breif_view_on_nextflow.md)
+- [Job Queueing & SLURM](Queueing_with_SLURM.md)
+
+### Day 5
+- [RNAseq Processing and Transcriptomics](RNAseq_Processing.md)
+- [RNAseq Differential Gene Analysis](RNAseq_DifferentialGeneAnalysis.md)
+- [RNAseq Downstream Interpretation](RNAseq_downstream_interpretation.md)

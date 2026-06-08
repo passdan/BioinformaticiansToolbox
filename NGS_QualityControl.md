@@ -2,7 +2,7 @@
 ### Setup
 If you have already copied the Day1 folder, move into it using ```cd```. Otherwise, this should be in: 
 ```
-~/Shared_folder/Day1
+cp -r ~/Share/Day1 .
 ```
 Use ls to check that you can see the data in this folder.
 
@@ -209,3 +209,4 @@ Note: You will need to change the adapter file based on if you are using single/
 3. Make the sliding window quality requirement more restrictive by increasing from 15 to 30 to see the effect.
 4. Contrast Trimmomatic & fastp QC processes by using fastqc on the outputs
 </details>
+

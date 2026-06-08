@@ -167,4 +167,7 @@ nextflow run main.nf ...............
 ```
 
 ### The end!
-This was a very quick and simple overview of the nextflow pipeline system and how to get started using it. It can be complext to start writing your own at first, but with the amount of published pipelines there are a lot of resources to lean on. Good luck!
+This was a very quick and simple overview of the nextflow pipeline system and how to get started using it. It can be complext to start writing your own at first, but with the amount of published pipelines there are a lot of resources to lean on.
+
+These workflows can grow and get significantly larger, and a good place to look for inspiration is the [RNAseq nf-core pipeline](https://nf-co.re/rnaseq/3.21.0) with a huge range of optional tools.
+<img width="2443" height="1020" alt="image" src="https://github.com/user-attachments/assets/19d571df-c7ca-4336-9e48-0ae5e815db3e" />
