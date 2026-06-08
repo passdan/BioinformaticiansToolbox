@@ -1,8 +1,5 @@
-<<<<<<< HEAD:PhysaliaWinterSchool2024-Schedule.md
 # Physalia Winter School in Bioinformatics - 2026
-=======
-# Physalia School in Bioinformatics - 2025
->>>>>>> a7d9bdd5ea008f554a58c74623787af11c839208:PhysaliaWinterSchool2025-Schedule.md
+
 ## Instructors: Dr Daniel Pass & Dr Christoph Hahn
 
 ---
