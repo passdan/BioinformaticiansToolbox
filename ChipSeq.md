@@ -65,12 +65,13 @@ singularity exec docker://staphb/bowtie2 \
 #### Align reads against the reference genome 
 N.b. This is the longest step, takes ~10 mins per sample
 ```
+cd ..
 mkdir aligned
 # One sample
 singularity exec docker://staphb/bowtie2 \
     bowtie2 -x REFS/c_elegans_index \
         -p 4 \
-        -q fastqs/SRR7297994-trim.fastq.gz \
+        -q fastqs/SRR7297994-Chr1.fastq.gz \
         -S aligned/SRR7297994.sam
 ```
 #### Format the outputs for downstream processing
@@ -86,12 +87,14 @@ singularity exec docker://staphb/samtools \
 #### Make a visualisation for genome browsers
 ```
 mkdir traces
-singularity exec docker://mgibio/deeptools \
+singularity exec docker://mgibio/deeptools:3.5.3 \
     bamCoverage -b aligned/SRR7297994.bam \
     -o traces/SRR7297994.bw \
     -p 4
 ```
+Lets look at it in the genome browser: https://igv.org/app/
 
+We cou
 
 ## Genome Alignment Multiple samples loop
 Of course, we'll usually have many samples to process together. Here is a simple loop of the above steps. Make sure to have the genome indexed first, and modify the code to reflect the location on your filesystem.
@@ -148,7 +151,6 @@ for sample in "${combined_list[@]}"; do
 
     # Optional: Good idea to remove intermediate files
     rm aligned/${sample}.sam
-done
 
 done
 ```
@@ -170,15 +172,15 @@ Now that we have seen that we have some peaks in our data, lets technically iden
 ### MACS2
 Macs is a really common peak caller and works really well. There are a huge number of parameters to play with so do [**check out their tutorial**](https://macs3-project.github.io/MACS/docs/tutorial.html) for more, especially around peak sizes for TFs vs histone modifications.
 
-Here's an example, code. It's harder to automate this step as you need to choose the pairs of ChIP and inputs that go together, and naming them:
+Here's an example, code. It's harder to loop this step as you need to choose the pairs of ChIP and inputs that go together, and naming them so lets do one pair for now:
 ```
 GENOME_SIZE="100286401"
 mkdir -p macs2
 
 singularity exec docker://dceoy/macs2 \
     macs2 callpeak \
-        -t Sample1_chip.bam \
-        -c Sample1_input.bam \
+        -t aligned/Sample1_chip.bam \
+        -c aligned/Sample1_input.bam \
         -f BAM \
         -g ${GENOME_SIZE} \
         -n Sample1 \
@@ -215,5 +217,21 @@ pos2bed.pl Sample1_histone_peaks.txt > Sample1_peaks.bed
 ```
 We can check this in the genome browser too. How well do the two peak calling methods agree?
 
+## Working from bed (TO BE ADDED)
+```bedtools intersect```
+
+
 ## Annotation & Interpretation
+Differential binding testing
+ 
+```
+macs2 bdgdiff \
+    --t1 cond1_treat_pileup.bdg \
+    --c1 cond1_control_lambda.bdg \
+    --t2 cond2_treat_pileup.bdg \
+    --c2 cond2_control_lambda.bdg 
+    --d1 12914669 --d2 14444786 \
+    -g 60 -l 120 --o-prefix diff_c1_vs_c2
+```
+
 We now have processed our raw data through the essential steps and it is now ready for further downstream analysis.

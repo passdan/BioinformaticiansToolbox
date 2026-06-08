@@ -31,7 +31,9 @@
   - [Tips](#tips)
 
 ## General Reminders!
-There is a lot of information in this booklet that is to help you with linux in general. Not every command applies right now and some are examples. You should only do the steps that follow the **EXERCISES** header, not every bit of code!
+There is a lot of information in this booklet that is to help you with linux in general. Not every command applies right now and some are examples that will only become important in more advanced bioinformatics.
+
+**!!! You should only do the steps that follow the **EXERCISES** header, not every bit of code !!!**
 
 ### When connecting to the server:
 - Server IP address:  Changes daily
@@ -43,7 +45,7 @@ The first item you supply on the command line is interpreted by the system as a 
 
 ```
 A general linux command:
-What I want to do              How I want to do it           On what do I want to do it
+What I want to do              How I want to do it           On which file(s) do I want to do it
 ```
 Most commands have options available that will alter how they function. You make use of these options by providing the command with parameters (aka flags), some of which will take arguments and some won't require any. Occasionally this is because there are none available, but usually this is because the command will use default settings if nothing is specified.
 ```

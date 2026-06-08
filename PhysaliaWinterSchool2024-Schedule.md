@@ -1,4 +1,4 @@
-# Physalia Winter School in Bioinformatics - 2024
+# Physalia Winter School in Bioinformatics - 2026
 ## Instructors: Dr Daniel Pass & Dr Christoph Hahn
 
 ---
@@ -17,10 +17,10 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 
 ## Schedule
  
-**Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course. If you're not on a course and some steps don't make sense you may want to go sign up for a course!
+**Note**: These teaching materials are designed to be understood alongside the files found on the teaching server presentations shared during the course. If you're not on a course and some steps don't make sense you may want to go sign up for a course! Get in touch!
 
 ### Day 1
-- Accessing the bioinformatics cloud Image 
+- Accessing the bioinformatics cloud image (ppt) 
 - [Review of Linux basics](Introduction_to_Linux.md)
 - [NGS data and Quality Control - How well did my sequencing run work?](NGS_QualityControl.md)
 - [Linux methods for multiple sample handling](Looping_in_linux.md)
