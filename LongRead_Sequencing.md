@@ -169,7 +169,7 @@ For phased output, `*.bp.hap1.p_ctg.gfa` and `*.bp.hap2.p_ctg.gfa` hold the two 
 ### Legacy assemblers
 You may still meet these in older pipelines:
 - **Canu** — accurate but slow; historically the standard, now usually replaced by Flye/hifiasm.
-- **wtdbg2 (redbean)** — very fast on noisy reads but superseded; see [LongReadAssembly.md](LongReadAssembly_errorProneData.md).
+- **wtdbg2 (redbean)** — very fast on noisy reads but superseded; see [LongReadAssembly_errorProneData.md](LongReadAssembly_errorProneData.md).
 - **Raven**, **NextDenovo** — fast ONT assemblers used in some pipelines.
 
 ## Polishing and correction
@@ -179,7 +179,7 @@ Polishing improves per-base accuracy of a draft assembly. **How much you need de
 ### Medaka
 Source: https://github.com/nanoporetech/medaka
 
-Medaka is ONT's neural-network consensus tool. It maps the reads back to the draft and corrects systematic basecalling errors. Modern Medaka **auto-selects the model** from the basecaller information in the reads, so you usually no longer need to specify it by hand:
+Medaka is ONT's neural-network consensus tool. It maps the reads back to the draft and corrects systematic basecalling errors. Medaka **auto-selects the model** from the basecaller information in the reads, so you usually no longer need to specify it by hand (you may see that in older tutorials):
 ```
 singularity exec docker://staphb/medaka:latest \
     medaka_consensus -i reads.fastq.gz -d flye_ont/assembly.fasta \
@@ -193,7 +193,7 @@ For lower-accuracy assemblies, high-quality Illumina reads can correct residual 
 - **Pilon** — older and slower, still common in teaching material.
 - **FMLRC2** — corrects the *reads* with a short-read index before assembly (the approach used in [LongReadAssembly.md](LongReadAssembly_errorProneData.md)).
 
-Note: polishing HiFi assemblies with short reads can *introduce* errors and is generally discouraged. Reach for short-read polishing only when the long-read data is noisy.
+Note: polishing HiFi assemblies with short reads can *introduce* errors and is generally discouraged. Only look to short-read polishing when the long-read data is noisy.
 
 ## Assessing the assembly
 
@@ -245,13 +245,13 @@ A reasonable default by data type:
 
 ## Data for these exercises
 
-The data in `~/Share/Day3/longRead` is drawn from public repositories so you can reproduce or extend the exercises with your own machine after the course.
+The data in `~/Share/Day3/longRead` is drawn from public repositories so you can reproduce or extend the exercises with your own machine after the course. There is the raw data, and also some pre-computed assemblies to allow you to jump straight to analysis of the outputs to save time.
 
 ### Primary dataset: *E. coli* (HiFi + ONT, same DNA)
 
 The main set comes from Tvedte *et al.* 2021, [*Comparison of long-read sequencing technologies in interrogating bacteria and fly genomes*](https://doi.org/10.1093/g3journal/jkab083) (BioProject [PRJNA602597](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA602597)). The **same *E. coli* DNA** was sequenced with PacBio HiFi, PacBio CLR, ONT and Illumina, and there is a ground-truth reference assembly (`GCF_014117345.2`) — ideal for comparing HiFi vs ONT vs hybrid against a known answer.
 
-> Note on chemistry: the **HiFi** reads are fully representative of current PacBio output, but the **ONT** reads are **R9.4.1** (one generation behind today's R10.4.1). They are fine for learning the assembly/polishing mechanics; for the *latest* ONT accuracy see the optional extension below.
+> Note on chemistry: the **HiFi** reads are representative of current PacBio output, but the **ONT** reads are **R9.4.1** (one generation behind today's R10.4.1). They are fine for learning the assembly/polishing mechanics; for the *latest* ONT accuracy see the optional extension below.
 
 
 ### Optional extension: latest ONT (R10.4.1)
@@ -260,24 +260,26 @@ To show off **current** ONT accuracy, use Ryan Wick's [*Perfect bacterial genome
 
 ## Exercises
 
-Using the E. coli long-read data in `~/Share/Day3/longRead`:
+Using the E. coli long-read data in `~/Share/Day3/longRead` choose **either ONT or PB** to analyse. You can go back and run the other sample(s) after the session.
 
-1. Run **NanoPlot** (or `seqkit stats`) on the raw long reads. What is the read N50 and median quality? Is this HiFi-grade or noisier data?
-2. Filter the reads with **Filtlong** (`--min_length 1000 --keep_percent 90`) and compare the stats before and after.
-3. Assemble the reads with **Flye**, choosing the flag that matches the data type. How many contigs do you get?
-4. [If ONT] Polish the Flye assembly with **Medaka** and note whether the model was auto-selected.
-5. Map the reads back to your assembly with **minimap2 + samtools**, and run `samtools flagstat`. What fraction of reads mapped?
-6. Evaluate the assembly with **QUAST** and **BUSCO** (`bacteria_odb12`). Compare against the short-read-only assembly from the assembly session — what improved?
+For time, you may want to skip running the assembly in-session and use the pre-completed output from step 3 to save time.
+
+1. [3 minutes] Run **NanoPlot** (or `seqkit stats`) on the long reads. Note: It does give some warnings about googe-chrome not being present but ignore it, and just download the output folder to look at on your own computer. Open the report first. What is the read N50 and median quality? Is this HiFi-grade or noisier data?
+2. [3 minutes] Filter the reads with **Filtlong** (`--min_length 1000 --keep_percent 90`) and compare the stats before and after.
+3. [15 minutes] Assemble the reads with **Flye**, choosing the flag that matches the data type. How many contigs do you get?
+4. [7 minutes] [If ONT] Polish the Flye assembly with **Medaka** and note whether the model was auto-selected.
+5. [Extension] Map the reads back to your assembly with **minimap2 + samtools**, and run `samtools flagstat`. What fraction of reads mapped?
+6. [3 minutes each] Evaluate the assembly with **QUAST** and **BUSCO** (`bacteria_odb12`). Compare against the short-read-only or hybrid assemblies provided — what improved?
 
 <details>
   <summary>Extension</summary>
 
 7. Assemble the same data with a second tool (**hifiasm** for HiFi, or a second Flye mode) and use QUAST to compare contiguity and BUSCO to compare completeness. Which assembly would you take forward, and why?
-8. Load the assembly graph (`assembly_graph.gfa` or the hifiasm `.gfa`) into **Bandage** and look at its structure — is it a clean circle, or tangled by repeats?
+8. Load the assembly graph (`assembly_graph.gfa` or the hifiasm `.gfa`) into **Bandage** [(**download here to your local computer**)](https://rrwick.github.io/Bandage/) and look at its structure — is it a clean circle, or tangled by repeats?
 </details>
 
 ## Container quick reference
-All tools above run from maintained containers, so nothing needs installing:
+All tools above run from containers on dockerhub:
 ```
 staphb/nanoplot:1.42.6
 staphb/seqkit:latest
