@@ -1,4 +1,4 @@
-# RNAseq Funtional and Network Analysis
+# RNAseq Functional and Network Analysis
 
 There are a huge number of tools for performing further analysis based on your RNAseq Differentially Expressed Gene results. Here are just a few tools that can help explore your data further and gain novel insights.
 

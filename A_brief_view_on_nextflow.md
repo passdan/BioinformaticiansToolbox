@@ -1,6 +1,6 @@
 # A Brief View on Nextflow
 
-Nextflow is a powerfull pipelining tool that allows reproducible and efficent processing of bioinformatic datasets. Specifically, some advantages:
+Nextflow is a powerful pipelining tool that allows reproducible and efficient processing of bioinformatic datasets. Specifically, some advantages:
 
 - Standardises the inputs & outputs between pipeline stages
 - Can process files simultaneously through pipelines
@@ -8,7 +8,7 @@ Nextflow is a powerfull pipelining tool that allows reproducible and efficent pr
 
 ## A basic nextflow script
 
-With nextflow already installed (see here), it is simple to run a script. Lets start with this simple script. 
+With nextflow already installed (see the [Nextflow installation guide](https://www.nextflow.io/docs/latest/install.html)), it is simple to run a script. Lets start with this simple script. 
 
 It has one parameter: ```str```, and two processes: ```splitGeneList``` & ```convertToUpper```
 
@@ -51,7 +51,7 @@ workflow {
 }
 ```
 
-## Runnning a nextflow script file
+## Running a nextflow script file
 Copy the file from the ```~/Shared_folder/nextflow/nextflow_gene_lister.nf``` (this file has some extra parts than the shorter version seen above, that we will use further down this page)
 
 We can now run the script:
@@ -130,7 +130,7 @@ nextflow run nextflow_gene_lister.nf --str \
 Notice how the first two steps (which were completed before we added the extra function) were 'cached', so they weren't processed again. Can be a big time saver!
 
 ## Using containers in nextflow
-You can instruct your pipeline to use singularity, docker, conda or several other instalation methods with the ```-pipeline``` parameter. That allows you to specify a codeblock such as this, often in a config file.
+You can instruct your pipeline to use singularity, docker, conda or several other installation methods with the ```-profile``` parameter. That allows you to specify a codeblock such as this, often in a config file.
 
 Here, any process labelled 'trimming' will use the container as found on dockerhub:
 ```
@@ -158,16 +158,16 @@ nextflow run nf-core/bamtofastq -r 2.1.0 \
 
 In this case, it is accessing the code from the nf-core repository, however often you'll want to download it and edit the configuration files yourself. 
 
-That can be done with the clone command. Read the parameters some of the parameterand then the pipeline ran as above:
+That can be done by cloning the repository. Read through the parameters and then run the pipeline as above:
 ```
-nextflow clone nf-core/bamtofastq
+git clone https://github.com/nf-core/bamtofastq
 ~~~~~~~
 cd bamtofastq
 nextflow run main.nf ...............
 ```
 
 ### The end!
-This was a very quick and simple overview of the nextflow pipeline system and how to get started using it. It can be complext to start writing your own at first, but with the amount of published pipelines there are a lot of resources to lean on.
+This was a very quick and simple overview of the nextflow pipeline system and how to get started using it. It can be complex to start writing your own at first, but with the amount of published pipelines there are a lot of resources to lean on.
 
 These workflows can grow and get significantly larger, and a good place to look for inspiration is the [RNAseq nf-core pipeline](https://nf-co.re/rnaseq/3.21.0) with a huge range of optional tools.
 <img width="2443" height="1020" alt="image" src="https://github.com/user-attachments/assets/19d571df-c7ca-4336-9e48-0ae5e815db3e" />

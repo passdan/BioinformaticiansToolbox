@@ -16,7 +16,7 @@ Use ls to check that you can see the data in this folder.
 ## FastQC 
 Summary: FastQC is a program that generates a suite of pre-determined reports and graphs documenting the quality and raw next generation sequence data. FastQC requires a FastQ, Colorspace FASTQ (SOLiD), GZip compressed FASTQ, SAM, BAM, SAM/BAM Mapped only (normally used for colorspace data) as input file. FastQC can operate in two different modes – as a stand-alone interactive application or as a command line non-interactive mode.  We will use it in Commandline mode.
 
-Source: http://www.bioinformatics.bbsrc.ac.uk/projects/fastqc/ (They also have further guides to analysis modules and examples of good and poor data. Also there is a link to a video tutorial!)
+Source: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/ (They also have further guides to analysis modules and examples of good and poor data. Also there is a link to a video tutorial!)
 
 __Example Output__
 ![Expected output](images/FastQC_report.png)

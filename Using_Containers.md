@@ -19,7 +19,7 @@ To pull FastQC and MultiQC Docker images and convert them into Singularity image
 
 ```
 singularity pull docker://biocontainers/fastqc:v0.11.9_cv8
-singularity pull docker://ewels/multiqc:latest
+singularity pull docker://multiqc/multiqc:latest
 ```
 
 These commands will save the images as .sif files in your current directory, such as fastqc_v0.11.9_cv8.sif and multiqc_latest.sif. You can then refer to them in your pipeline
@@ -31,7 +31,7 @@ After pulling the images, you can run FastQC and MultiQC locally with Singularit
 singularity exec fastqc_v0.11.9_cv8.sif fastqc sample.fastq
 ```
 
-We can also use the bind function to specify folders on your system to be visable inside the container. Here we bind the current working directory to the same location in the Singularity container and execute MultiQC in that directory MultiQC.
+We can also use the bind function to specify folders on your system to be visible inside the container. Here we bind the current working directory to the same location in the Singularity container and execute MultiQC in that directory MultiQC.
 ```
 singularity exec --bind `pwd`:`pwd` --pwd `pwd` multiqc_latest.sif multiqc .
 ```
@@ -50,7 +50,7 @@ singularity exec docker://biocontainers/fastqc:v0.11.9_cv8 fastqc sample.fastq
 
 Similarly, for MultiQC:
 ```
-singularity exec --bind `pwd`:`pwd` --pwd `pwd` docker://ewels/multiqc:latest multiqc .
+singularity exec --bind `pwd`:`pwd` --pwd `pwd` docker://multiqc/multiqc:latest multiqc .
 ```
 In both cases, Singularity pulls the Docker image, converts it to a Singularity image, and executes the specified command, all in one go. This can be particularly useful for one-off tasks or for testing different versions of a tool without keeping the image locally.
 

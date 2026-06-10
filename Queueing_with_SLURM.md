@@ -19,7 +19,7 @@ $ sinfo -O "%C %P"
 Lets take a simple QC script:
 ```
 #!/bin/bash
-mkdir -P trim_fastq
+mkdir -p trim_fastq
 
 for file in *R1.fastq.gz
 do
@@ -48,7 +48,7 @@ Note the ```${SLURM_CPUS_PER_TASK}``` parameter, which takes it's value from the
 #SBATCH --cpus-per-task=4       # Request cores per node
 #SBATCH --mem-per-cpu=2400M     # Request RAM per core
 
-mkdir -P trim_fastq
+mkdir -p trim_fastq
 
 for file in *R1.fastq.gz
 do
@@ -80,9 +80,9 @@ However we can instead create an array of jobs that start independently and use 
 #SBATCH --mem-per-cpu=2400M     # Request RAM per core
 #SBATCH --array=1-30%4          # Do 30 samples, 4 at a time
 
-mkdir -P trim_fastq
+mkdir -p trim_fastq
 
-# Note the ${SLURM_ARRAY_TASK_ID} which containes a range of files
+# Note the ${SLURM_ARRAY_TASK_ID} which contains a range of files
 file=$(ls fastq/*_R1.fastq.gz | sed -n ${SLURM_ARRAY_TASK_ID}p)
 
 R1=$(basename $file | cut -f1 -d.)

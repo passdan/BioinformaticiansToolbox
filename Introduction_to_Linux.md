@@ -25,7 +25,7 @@
   - [Example process when writing and running a programme](#example-process-when-writing-and-running-a-programme)
   - [EXERCISES](#exercises-7)
   - [\[EXTENSION\]](#extension-1)
-- [Querying files with Grep](#querying-files-with-grep)
+- [\[Extension\] Querying files with Grep](#extension-querying-files-with-grep)
   - [EXERCISES](#exercises-8)
 - [That's it!](#thats-it)
   - [Tips](#tips)
@@ -361,7 +361,9 @@ $ ./myscript.sh subsample_Ill1.fasta
 ```
 </details>
 
-## Querying files with Grep
+Happy with that? Now lets look at creating files with loops in them! [Looping_in_linux.md]
+
+## [Extension] Querying files with Grep
 
 ```grep``` stands for global regular expression print; you use this command to search for text patterns in a file (or any stream of text). Eg.
 ```

@@ -4,7 +4,7 @@ Three main steps are taken to analyse a series of RNAseq fastq sample files (fol
 - Alignment: STAR – (Spliced Transcript Alignments to a Reference) is an alignment package which functions similarly to standard genome alignments but is designed for short regions of RNA that could span intron-exon junctions and with low compute requirements. STAR outputs a bam format file which contains the locations where all the reads in your dataset have aligned and the genes they cover.
 - Counting: FeatureCounts is a simple package that takes the positions of mapped reads and outputs a file quantifying the expression of each gene or exon (based on parameter choices). At this point raw read counts are hard to interpret due to likely different levels of sequencing achieved per sample and methodological biases. 
     - One step prior to counting is marking duplicates that arise from data generation for further information, or so that they can be removed. This used to be very common and investigated, but these days it is not too common as it is found to introduce more errors. We can run this step just for our information using the picard tool MarkDuplicates.
-- Differential Gene Analysis: Contrasting the expression profile of the samples is typically done with one of two R packages: Deseq2 or EdgeR (the mac vs windows of the RNAseq fight), however a multitude of alternatives exist. These packages perform the normalization and statistical steps of contrasting samples as defined in a metadata file stating your experimental design (replicates, tissue type, treatment etc). The output here is a range of significant genes, ordinance and cluster analysis of sample similarity, and various quality control figures.
+- Differential Gene Analysis: Contrasting the expression profile of the samples is typically done with one of two R packages: Deseq2 or EdgeR (the mac vs windows of the RNAseq fight), however a multitude of alternatives exist. These packages perform the normalization and statistical steps of contrasting samples as defined in a metadata file stating your experimental design (replicates, tissue type, treatment etc). The output here is a range of significant genes, ordination and cluster analysis of sample similarity, and various quality control figures.
 
 Following these three steps, there are an almost infinite number of tools and packages to look deeper into your data, find experimentally specific insights, and prior published data to contrast against.
 
@@ -54,7 +54,7 @@ picard MarkDuplicates \
 		M=markdup/Sample.metrics.rmdup.txt \
 		REMOVE_DUPLICATES=true 
 ```
-Count fetures/genes
+Count features/genes
 ```
 featureCounts \
 	-T $threads -p -F GTF -t exon -g gene_id \
@@ -89,7 +89,7 @@ Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa
 ……… <Lots of other index files for star to function that you don’t need to touch!>
 ```
 
-### EXCERCISES
+### EXERCISES
 
 Using the pre-made scripts perform the steps on three pairs of fastq files. There are examples of all of these files in the ```~/Share/Day5/RNAseq-Processing``` directory which you should copy into your own folder. You may need to edit them to represent your own working folder and filenames
 

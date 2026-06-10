@@ -1,4 +1,4 @@
-# Physalia Winter School in Bioinformatics - 2026
+# Physalia Bioinformatics School - 2026
 
 ## Instructors: Dr Daniel Pass & Dr Christoph Hahn
 
@@ -32,13 +32,13 @@ Live sessions involve both mirroring exercises with the instructor to demonstrat
 
 ### Day 3
 - [Genome Annotation and visualisation](https://github.com/chrishah/post-assembly-intro)
-- [Assembly with long read data - Nanopore/PacBio & hybrid assemblies](LongReadAssembly.md)
+- [Assembly with long read data - Nanopore/PacBio & hybrid assemblies](LongRead_Sequencing.md)
 
 ### Day 4
 - [Phylogenetics and Phylogenomics](https://github.com/chrishah/phylogenomics_intro_vertebrata)
 - Bioinformatic analysis with pipelines
   - [Snakemake](https://github.com/chrishah/phylogenomics_intro_vertebrata)
-  - [Nextflow](A_breif_view_on_nextflow.md)
+  - [Nextflow](A_brief_view_on_nextflow.md)
 - [Job Queueing & SLURM](Queueing_with_SLURM.md)
 
 ### Day 5
