@@ -8,10 +8,34 @@ Following these three steps, there are an almost infinite number of tools and pa
 
 ### Contents
 
+- [Differential Gene Expression Analysis with DESeq2](#differential-gene-expression-analysis-with-deseq2)
+  - [Contents](#contents)
+  - [What DESeq2 is actually doing](#what-deseq2-is-actually-doing)
+  - [Differential Gene Expression analysis using Deseq2 \& Sartools](#differential-gene-expression-analysis-using-deseq2--sartools)
+- [Data](#data)
+- [Performing a Differential Gene Expression analysis](#performing-a-differential-gene-expression-analysis)
+  - [Using R on the command line](#using-r-on-the-command-line)
+  - [Using R on the command line](#using-r-on-the-command-line-1)
+- [Generating Heatmaps](#generating-heatmaps)
+  - [Using R on the command line](#using-r-on-the-command-line-2)
+  - [EXTENSION: Filter genes to known ASD relevant selection](#extension-filter-genes-to-known-asd-relevant-selection)
+
+### What DESeq2 is actually doing
+
+SARTools automates the steps for us, but it's worth knowing what happens under the bonnet so the outputs make sense:
+
+- **Design formula** (e.g. `~ condition`) tells DESeq2 which metadata column(s) define the comparison.
+- **Size-factor normalisation** corrects for differences in sequencing depth between samples (median-of-ratios method), so a gene isn't called "up" simply because that library was sequenced more deeply.
+- **Dispersion estimation** models each gene's variability, sharing information across genes so that estimates from few replicates are stabilised.
+- **Negative-binomial test** fits a model per gene and tests whether the log2 fold-change between groups differs from zero.
+- **LFC shrinkage** pulls fold-changes for low-count, noisy genes towards zero, giving more reliable rankings.
+- **Multiple-testing correction**: raw p-values are adjusted (Benjamini–Hochberg) into an `padj` — always filter on `padj`, never the raw p-value.
+
+A gene is usually called "differentially expressed" on a combination of `padj` (e.g. < 0.05) and a log2 fold-change threshold.
 
 ### Differential Gene Expression analysis using Deseq2 & Sartools
 
-We will be using DESeq2 to perform our analysis but it is a massive package with a huge number of options, parameters and steps ([See the full manual here](https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html). 
+We will be using DESeq2 to perform our analysis but it is a massive package with a huge number of options, parameters and steps ([See the full manual here](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html). 
 
 Today for a rapid overview we will use a R wrapper package named SARTools (Statistical Analysis of RNA-Seq Tools) to automate the core steps and produce a graphical output. It also creates the deseq object for further analysis using standard deseq2 commands too. The full guide to SARTools can be found on the [github page](https://github.com/PF2-pasteur-fr/SARTools).  
 
@@ -22,6 +46,8 @@ $ grep -P '\tgene\t' Homo_sapiens.GRCh38.100.gtf | cut -f 9 |cut -f1,3 -d';' | s
 ```
 
 ## Data
+
+> **Note — this is a different dataset from the Processing section.** The Processing exercises used *Arabidopsis* reads; for differential expression we switch to a pre-made *human* dataset (the count tables are provided for you), so you don't need to carry your Arabidopsis outputs across. The steps are identical regardless of species.
 
 A set of nine Human neuronal differential RNAseq samples have been sequenced, consisting of 6x control samples (3x two different individuals) and 3x a deletion mutant of the 1q21.1 cytogenetic region of the human genome, and 3x of a duplication of this region. 
 
@@ -127,11 +153,10 @@ Firstly, pick a comparison you are most interested in (Deletion vs Duplication v
 Example code, where A & B is your choice of Deletion/Duplication/Control:
 ```
 $ head -n1 AvsB.complete.txt > AvsB.ASD.txt
-$ grep -f gene_list.txt AvsB.complete.txt >> AvsB.ASD.txt
+$ grep -f ASD_list.txt AvsB.complete.txt >> AvsB.ASD.txt
 ```
 
 You can now use that file for your heatmap generation using the same method as above
 
 
 </details>
-

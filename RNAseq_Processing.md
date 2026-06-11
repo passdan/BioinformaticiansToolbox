@@ -1,12 +1,14 @@
 # Processing RNAseq with a reference genome
 
 Three main steps are taken to analyse a series of RNAseq fastq sample files (following quality filtering): 
-- Alignment: STAR – (Spliced Transcript Alignments to a Reference) is an alignment package which functions similarly to standard genome alignments but is designed for short regions of RNA that could span intron-exon junctions and with low compute requirements. STAR outputs a bam format file which contains the locations where all the reads in your dataset have aligned and the genes they cover.
-- Counting: FeatureCounts is a simple package that takes the positions of mapped reads and outputs a file quantifying the expression of each gene or exon (based on parameter choices). At this point raw read counts are hard to interpret due to likely different levels of sequencing achieved per sample and methodological biases. 
-    - One step prior to counting is marking duplicates that arise from data generation for further information, or so that they can be removed. This used to be very common and investigated, but these days it is not too common as it is found to introduce more errors. We can run this step just for our information using the picard tool MarkDuplicates.
-- Differential Gene Analysis: Contrasting the expression profile of the samples is typically done with one of two R packages: Deseq2 or EdgeR (the mac vs windows of the RNAseq fight), however a multitude of alternatives exist. These packages perform the normalization and statistical steps of contrasting samples as defined in a metadata file stating your experimental design (replicates, tissue type, treatment etc). The output here is a range of significant genes, ordination and cluster analysis of sample similarity, and various quality control figures.
+- Alignment: 
+  - Whole genome: e.g. STAR An alignment package which functions similarly to standard genome alignments but is designed for short regions of RNA that could span intron-exon junctions and with low compute requirements. STAR outputs a bam format file which contains the locations where all the reads in your dataset have aligned and the genes they cover.
+  - Psuedo-alignment: e.g. Salmon
+- Counting: FeatureCounts takes the positions of mapped reads in a genome file and outputs a file quantifying the expression of each gene or exon (based on parameter choices). N.b. not required with psuedo-alignment as it is completed in the process
+    - One ***potential*** step prior to counting is removing duplicates that arise from data generation. This used to be very common and investigated, **but now is not advised** as it is found to introduce more errors. We can run this step just for our information using the picard tool MarkDuplicates.
+- Differential Gene Analysis: Contrasting the expression profile of the samples is typically done with one of two R packages: Deseq2 or EdgeR however a multitude of alternatives exist. These packages perform the normalization and statistical steps of contrasting samples as defined in a metadata file (replicates, tissue type, treatment etc). 
 
-Following these three steps, there are an almost infinite number of tools and packages to look deeper into your data, find experimentally specific insights, and prior published data to contrast against.
+Following these three steps, there are an unending number of tools and packages to look deeper into your data, find experimentally specific insights, and prior published data to contrast against.
 
 ## Data
 
@@ -14,8 +16,8 @@ This data comes from a paper looking at the chromatin organisation within the Ar
 
 Full data is available here: https://www.ebi.ac.uk/ena/browser/view/PRJNA369530
 
-### Basic Process
-QC
+### Basic genome alignment process
+#### QC
 ```
 fastp \
 	--in1 fastq/Sample_1.fastq \
@@ -23,9 +25,10 @@ fastp \
 	--out1 fastq/Sample-trim_1.fastq \
 	--out2 fastq/Sample-trim_2.fastq
 
-fastqc -t $threads fastq/SampleA*.fastq
+fastqc -t $threads fastq/Sample-trim_*.fastq
 ```
-Index the reference genome
+
+#### Index the reference genome
 ```
 STAR 	\
 	--runThreadN 8 \
@@ -33,42 +36,68 @@ STAR 	\
 	--genomeDir  data/REFS \
 	--genomeFastaFiles ReferenceGenome.fa \
 	--sjdbGTFfile ReferenceGeneLocations.gtf \
-	--sjdbOverhang 49
+	--sjdbOverhang 99
 ```
-Map reads against reference genome
+Set `--sjdbOverhang` to your read length minus 1 (here 99 for 100 bp reads); the default of 100 is a reasonable fallback if read lengths vary.
+
+#### Map reads against reference genome
 ```
 STAR \
     --outMultimapperOrder Random \
     --runThreadN $threads  \
     --runMode alignReads \
     --quantMode GeneCounts \
+    --outSAMtype BAM SortedByCoordinate \
     --outFileNamePrefix star/Sample. \
     --genomeDir data/REFS \
     --readFilesIn fastq/Sample-trim_1.fastq fastq/Sample-trim_2.fastq
 ```
-Optional Mark duplicates
+With `--outSAMtype BAM SortedByCoordinate`, STAR writes a sorted BAM named `star/Sample.Aligned.sortedByCoord.out.bam`. Note that `--quantMode GeneCounts` *also* writes a per-gene count table `star/Sample.ReadsPerGene.out.tab`, so STAR alone already gives you counts — featureCounts below is the second of two possible counting routes.
+
+#### Optional: mark duplicates (for QC information only)
 ```
 picard MarkDuplicates \
-		I=star/Sample.bam \
-		O=markdup/Sample.rmdup.bam \
-		M=markdup/Sample.metrics.rmdup.txt \
-		REMOVE_DUPLICATES=true 
+		I=star/Sample.Aligned.sortedByCoord.out.bam \
+		O=markdup/Sample.markdup.bam \
+		M=markdup/Sample.metrics.txt \
+		REMOVE_DUPLICATES=false
 ```
+For RNAseq we set `REMOVE_DUPLICATES=false` — we *mark* duplicates so MultiQC can report the rate, but we don't remove them, because in RNAseq high-expression genes legitimately produce many identical fragments and removing them biases the counts. So the counting step below reads the STAR BAM, not the dedup one.
+
 Count features/genes
 ```
 featureCounts \
-	-T $threads -p -F GTF -t exon -g gene_id \
+	-T $threads -p --countReadPairs -F GTF -t exon -g gene_id \
 	-a data/REFS/ReferenceGeneLocations.gtf \
 	-o featureCounts/Sample.featurecount \
-	star/Sample.sorted.bam
+	star/Sample.Aligned.sortedByCoord.out.bam
+```
+Note: In Subread ≥ 2.0.2 `-p` only declares the data is paired; add `--countReadPairs` to count fragments rather than individual reads.
+
+
+### Pseudo-alignment - Alignment to transcriptome (Salmon / kallisto)
+
+The STAR → featureCounts route above aligns every read to genomic coordinates, which is accurate but slow and disk-heavy. A faster mainstream alternative is **pseudo-alignment** (or "lightweight mapping") with common tools **Salmon** or **kallisto**. Rather than a full base-by-base alignment, these match each read directly to the *transcriptome* and quantify in a fraction of the time and memory, while handling multi-mapping reads and isoforms more gracefully.
+
+```
+# build an index once from the transcriptome (cDNA) fasta
+salmon index -t Arabidopsis_thaliana.TAIR10.cdna.fa -i salmon_index
+
+# quantify each sample
+salmon quant -i salmon_index -l A \
+    -1 fastq/Sample-trim_1.fastq -2 fastq/Sample-trim_2.fastq \
+    -p $threads --validateMappings -o salmon/Sample
 ```
 
+This produces per-transcript estimates (`quant.sf`), which you summarise to gene level with the **tximport** R package and feed straight into DESeq2 — no BAM, sorting, MarkDuplicates or featureCounts step needed.
 
-We will be using  scripts to run these steps. In the `Share/Day5` folder you will find the following that you can use to base your analysis, however make sure you’re tuning it to your own file structure and file names.
+### Which to choose
+- pseudo-alignment when you only need gene/transcript *quantification* (most differential-expression studies); 
+- full alignment with STAR when you also need the BAM itself — for novel-junction discovery, variant calling, or coverage visualisation.
 
-So far we have used only a small dataset to quickly practice the steps but now we’ll be using full sized RNAseq samples. This is because otherwise it causes the programs to think it’s bad data and causes errors. 
+### Data
 
-In the `Share/Day5/RNAseq-Processing` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder `Share/Day5/REFS` there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
+In the `~/Share/Day5/RNAseq-Processing` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder `Share/Day5/REFS` there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
 ```
 $ ls Share/Day5/RNAseq-Processing:
 1-QC.sh  
@@ -95,13 +124,12 @@ Using the pre-made scripts perform the steps on three pairs of fastq files. Ther
 
 Note: Here, we will use a local version of the singularity image files to avoid downloading uniquely each (alternatively replace with ```docker://passdan/rnaseq-mini```).
 
-0. Copy the folder ```~/Share/Day5/RNAseq-Processing``` to your local directory and enter it (```cp -r```)
-1. Read and review the 5 looping scripts to understand what their functions are
+0. Copy the folder ```~/Share/Day5/RNAseq-Processing``` to your local directory (```cp -r```) and enter it with cd.
+1. Choose if you want to run Genome alignment or psuedo-alignment
 2. Perform the processing steps:
    1. QC and trim your sample data (script 1)
-   2. Use your trimmed data as inputs to run star (script 3)
-   3. Run picard MarkDuplicates to remove identified duplicates in the data (script 4)
-   4. Use featureCounts to count abundance of mapped reads to each gene (script 5)
+   2. Use your trimmed data as inputs to run star or salmon (script 3)
+   3. If using star, use featureCounts to count abundance of mapped reads to each gene (script 5)
 3. Review the outputs to see what files you have created!
 
 4. Create a MultiQC report for  the outputs

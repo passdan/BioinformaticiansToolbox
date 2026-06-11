@@ -169,43 +169,36 @@ You can have your pipeline pull its software automatically via singularity, dock
 
 Rather than depending on the programs being installed already, lets run fastp inside a **singularity** container so nothing needs installing locally. The `container` directive names the image, and turning on singularity in `nextflow.config` tells Nextflow to run every process through it (the docker image is pulled and converted automatically):
 
+Here, any process labelled 'trimming' will use the container as found on dockerhub:
+
 ```
 // nextflow.config — picked up automatically when in the launch directory
 singularity.enabled    = true
 singularity.autoMounts = true
-```
 
-Here, any process labelled 'trimming' will use the container as found on dockerhub:
-```
+process {
   withLabel: trimming {
      container = 'staphb/fastp:0.23.4'
   }
+}
 ```
 
-## Running a published pipeline & using containers
-Many professional and complex pipelines are published on nf-core, and many groups and individuals publish their own on github that you can directly reference. 
+## Running a published pipeline
+Many groups and individuals publish their own pipelines on github that you can directly reference, and nf-core exists as a semi-formalised repository of nextflow approved pipelines that follow some overall structural rules.
 
-Here lets use a bam to fastq converter. Here's the pipeline from [nf-core/bamtofastq](https://nf-co.re/bamtofastq/2.1.0).
+Lets test nfcore using a bam to fastq converter. Here's the pipeline from [nf-core/bamtofastq](https://nf-co.re/bamtofastq/2.1.0).
 
 ![bamtofastq](images/nf-core-bamtofastq-subway.png)
 
 This is defined to use singularity for all programmes (no installations required!). Note I have limited the cpu and memory usage for this tutorial by passing a small config file with `-c`:
 ```
-nextflow run nf-core/bamtofastq -r 2.1.0 \
+nextflow run nf-core/bamtofastq \
     -profile singularity \
     --input ~/Shared_folder/nextflow/bam_samplesheet.csv \
-    --outdir bc2fq_output \
-    -c limits.config
+    --outdir bc2fq_output 
 ```
-where `limits.config` caps the resources any job can request:
-```
-process {
-    resourceLimits = [ cpus: 2, memory: 8.GB ]
-}
-```
-> The older `--max_cpus` / `--max_memory` parameters you'll see in many tutorials were removed from the nf-core template in tools v3.0 (2024) in favour of Nextflow's native `resourceLimits`. Pipelines built on the newer template expect the config approach above.
 
-In this case, it is accessing the code from the nf-core repository, however often you'll want to download it and edit the configuration files yourself. 
+In this case, it is accessing the code from the nf-core repository, however often you'll want to download it and edit the configuration files yourself.
 
 That can be done by cloning the repository. Read through the parameters and then run the pipeline as above:
 ```
