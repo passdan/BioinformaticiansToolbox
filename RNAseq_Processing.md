@@ -100,11 +100,13 @@ This produces per-transcript estimates (`quant.sf`), which you summarise to gene
 In the `~/Share/Day5/RNAseq-Processing` folder there are three pairs of RNAseq files from an Arabidopsis RNAseq study. In the folder `Share/Day5/REFS` there is a reference genome, and a gtf file. The step 2 “star index genome” has already been run for you (you don’t need to do this!)
 ```
 $ ls Share/Day5/RNAseq-Processing:
-1-QC.sh  
-2-star_index_genome.sh  (already done, don’t repeat!)
-3-star.sh  
-4-markduplicates.sh  
-5-featurecounts.sh 
+1-QC.sh
+2-salmon_index.sh
+2-star_index_genome.sh
+3-salmon_quant.sh
+3-star_quant.sh
+4-markduplicates.sh
+5-featurecounts.sh
 ```
 ```
 $ ls Share/Day5/RNAseq-Processing/fastqs
