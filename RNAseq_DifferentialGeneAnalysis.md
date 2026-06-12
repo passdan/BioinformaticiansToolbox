@@ -60,16 +60,17 @@ When doing the analysis we will generate comparisons between Control, Duplicatio
 
 ## Performing a Differential Gene Expression analysis
 
-You can either open the DESeq2/Sartools script in the RStudio server at today's IP address and ```:8787``` (i.e 123.4.5.67:8787) or run R on the command line once you have edited the script.
+Open the DESeq2/Sartools script in the RStudio server at today's IP address and ```:8787``` **(i.e 123.4.5.67:8787)**. Alternatively you can run R on the command line once you have edited the script.
 
 You can also open it directly on your own computer (not recommended during a workshop as it will take time to install some packages). 
-1. Copy the folder RNAseq-Analysis to your local directory, and then enter it.
+1.**On the command line** copy the folder RNAseq-Analysis to your local directory, and then enter it.
 ```
 $ cp -r ~/Share/Day5/RNAseq-Analysis .
 ```
 2. View and edit the Rscript to confirm the file locations and choose your parameters and testing options.
 
 In Rstudio run line by line until you reach the ```check.parameters``` function.
+
 
 <details>
   <summary>
@@ -89,7 +90,7 @@ $ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in \
 ```
 </details>
 
-3. If everything comes back successful (no errors!), then we can run the full script. On Rstudio continue until you reach the end of the "tables" function (before starting heatmaps).
+1. If everything comes back successful (no errors!), then we can run the full script. On Rstudio continue until you reach the end of the "tables" function (before starting heatmaps).
 
 <details>
   <summary>
