@@ -74,7 +74,7 @@ sample1.fastq.gz  sample2.fastq.gz  sample3.fastq.gz  sample4.fastq.gz  sample5.
 
 ### EXERCISES
 
-There is a tar zipped file containing 5 raw Chip-seq fastq files at the http://github.com/passdan/BioinformaticiansToolbox/fastqs. Copy the URL for the file in that folder, then:
+There is a tar zipped file containing 3 paired fastq files at the http://github.com/passdan/BioinformaticiansToolbox/fastqs. Copy the URL for the file in that folder, then:
 
 1. Download the fastq archive from with `wget` and extract it into your `raw_data` folder.
 2. Use `ls -lh raw_data` to confirm you have **five** `.fastq.gz` files. How big is each one?
