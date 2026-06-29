@@ -77,7 +77,7 @@ sample1.fastq.gz  sample2.fastq.gz  sample3.fastq.gz  sample4.fastq.gz  sample5.
 There is a tar zipped file containing 3 paired fastq files at the http://github.com/passdan/BioinformaticiansToolbox/fastqs. Copy the URL for the file in that folder, then:
 
 1. Download the fastq archive from with `wget` and extract it into your `raw_data` folder.
-2. Use `ls -lh raw_data` to confirm you have **five** `.fastq.gz` files. How big is each one?
+2. Use `ls -lh raw_data` to confirm you have **three** `.fastq.gz` files. How big is each one?
 
 ## 3. Running a command-line program
 
@@ -86,7 +86,7 @@ A bioinformatics tool is just another command: the program name, some flags (aka
 **FastQC** produces a quality report for a sequencing file:
 
 ```
-$ fastqc raw_data/sample1.fastq.gz
+$ fastqc raw_data/sampleA.1.fastq.gz
 ```
 
 This writes `sample1_fastqc.html` (open it in a browser) and a `.zip` of the details, right next to the input.
@@ -108,6 +108,7 @@ Here `-i` is the **i**nput and `-o` the **o**utput. fastp won't create the outpu
 2. Run `fastqc` on one of the samples in the `raw_data` folder and confirm the `.html` report appears.
 3. Make a `trimmed` folder, then run `fastp` on the sample as above. Read the summary fastp prints to the screen. How many reads passed the filter?
 4. Run `fastqc` again, this time on your **trimmed** file, and compare it to the raw one.
+5. [Extension] Look at the parameters for paired-end fastp, and run a pair of reads 
 
 ## 4. Writing a simple loop
 
